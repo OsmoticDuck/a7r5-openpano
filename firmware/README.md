@@ -4,7 +4,7 @@
 
 | 文件 | 作用 |
 |---|---|
-| `final/build_minimal.py` | 读取项目 A 的 4.92 quality-menu 基线 AP/CP，校验后输出最小最终 AP/CP |
+| `final/build_minimal.py` | 读取项目 A 的 5.01 raw-preview-magnify 基线 AP/CP，校验后输出最小最终 AP/CP |
 
 ## 构建
 
@@ -18,19 +18,19 @@ cd ext-aspect-minimal
 python3 build_minimal.py
 ```
 
-输入 = 最终（4.92 基线已经包含扩展画幅、自制图标、AF 和重启修复）：
+输入 = 最终（5.01 基线已经包含扩展画幅、自制图标、RAW 预览比例修正、AF 和重启修复）：
 
-- AP：`build-4.92-quality-menu-20261105/patched/appFw.so`，SHA256 `d1786165...`
-- CP：`build-4.92-quality-menu-20261105/patched/cpapp-b.bin`，SHA256 `feececdc...`
+- AP：`build-5.01-magnify-20261110/patched/appFw.so`，SHA256 `1a048077...`
+- CP：`build-5.01-magnify-20261110/patched/cpapp-b.bin`，SHA256 `33b63f6b...`
 
 输出：
 
-- `ap-build/appFw-minimal.NONINSTALLABLE.so`，SHA256 `d17861657b062d4228ea74b31844bf7476cd82e3530c36b9b201f930c3df432f`
-- `ap-build/cpapp-minimal.NONINSTALLABLE.bin`，SHA256 `feececdcfdfff740324327eadedc863fc293e136b9b1db91cc8bc4e222f550c4`
+- `ap-build/appFw-minimal.NONINSTALLABLE.so`，SHA256 `1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751`
+- `ap-build/cpapp-minimal.NONINSTALLABLE.bin`，SHA256 `33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10`
 
 ## 图标
 
-4.92 基线的菜单/回放资源已经安装自制 2:1、65:24 图标；`assets/icons/` 是源文件/备份。2.35:1 用原厂图标。
+5.01 基线的菜单/回放资源已经安装自制 2:1、65:24 图标；`assets/icons/` 是源文件/备份。2.35:1 用原厂图标。
 
 ## 未解决
 

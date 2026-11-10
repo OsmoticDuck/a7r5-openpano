@@ -22,7 +22,7 @@ $ROOT/
 ### 1.1 sony-a7r5-custom-firmware（项目 A）
 
 - 原厂/自定义固件提取、打包、FDAT/RSA 签名、AES 整包；
-- 项目 A 的 **4.92 quality-menu 基线**（本仓库 `build_minimal.py` 读取它的 `patched/appFw.so` / `patched/cpapp-b.bin`）；
+- 项目 A 的 **5.01 raw-preview-magnify 基线**（本仓库 `build_minimal.py` 读取它的 `patched/appFw.so` / `patched/cpapp-b.bin`）；
 - 该基线已经包含扩展画幅、自制菜单/回放图标、AF 修正和重启/显示修复；
 - `feature-extension-436/result/source`、`package.py`/现有 package 脚本；
 - 原厂 DAT、升级器、公私钥、原始输入。
@@ -40,11 +40,12 @@ $ROOT/
 - 扩展画幅模型 **4..6** 保存在原生 `52b`；菜单增加自定义行；
 - CP 增加手动比例记录和消费路径，覆盖取景、对焦放大、拍摄、回放；
 - AP 为普通取景、MF、拍摄、回放分别构建独立几何/上下文；RAW 保留原厂全源；大预览使用独立 1920 宽；
-- 4.92 基线已包含菜单/回放自制图标（2:1、65:24；2.35:1 用原厂图标）；
-- 4.92 基线已包含 AF 修正（AF 显示类别读取真实源，而不是固定全传感器类别）；
-- 4.92 基线已包含使用自定义画幅所必需的重启/显示修复：菜单资源、AF 边界/glyph、FC/YUV、CWB、自动布局、显示校准、规则 NOT_SET、源格式、网格/菜单 getter、追踪、AF 窗口、MF/回放共用 PID3019、菜单所有权、回放表交接、CP selector；
-- 4.92 基线的调试钩子已经是原版指令，没有活动 diagnostics；
-- **未解决**：自定义画幅 RAW 回放放大仍提示“无法放大”。此前诊断确认 AP 的 read/availability/descriptor 均成功；caution finder、四个直接 `0x0207a042` 构造点、`0x18992f4` 对话框键都未命中；最后一次 caution 入口钩子导致启动循环，已作废。4.93–4.99 的 RAW zoom 尝试不属于本最小版本；5.x 探针也不包含。
+- 5.01 基线已包含菜单/回放自制图标（2:1、65:24；2.35:1 用原厂图标）；
+- 5.01 基线已包含 RAW 预览比例/裁切修正；
+- 5.01 基线已包含 AF 修正（AF 显示类别读取真实源，而不是固定全传感器类别）；
+- 5.01 基线已包含使用自定义画幅所必需的重启/显示修复：菜单资源、AF 边界/glyph、FC/YUV、CWB、自动布局、显示校准、规则 NOT_SET、源格式、网格/菜单 getter、追踪、AF 窗口、MF/回放共用 PID3019、菜单所有权、回放表交接、CP selector；
+- 5.01 基线的调试钩子已经是原版指令，没有活动 diagnostics；
+- **未解决**：自定义画幅 RAW 回放放大仍提示“无法放大”。此前诊断确认 AP 的 read/availability/descriptor 均成功；caution finder、四个直接 `0x0207a042` 构造点、`0x18992f4` 对话框键都未命中；最后一次 caution 入口钩子导致启动循环，已作废。5.02 起的 RAW zoom 诊断/探针不属于本最小版本；5.x 探针也不包含。
 
 ### 1.4 自制画幅图标
 
@@ -57,7 +58,7 @@ $ROOT/
 | 回放 | 2:1 | 47×32 | `play-2x1.png` + `play-2x1.rgba4444` |
 | 回放 | 65:24 (XPan) | 47×32 | `play-65x24.png` + `play-65x24.rgba4444` |
 
-- 这些图标已经安装在 4.92 基线的菜单/回放资源中；`assets/icons/` 是源文件，不是独立可刷固件；
+- 这些图标已经安装在 5.01 基线的菜单/回放资源中；`assets/icons/` 是源文件，不是独立可刷固件；
 - 2.35:1 沿用原厂图标；
 - 图标哈希见 `assets/icons/artwork-manifest.json` 和 `assets/icons/README.md`。
 
@@ -65,15 +66,15 @@ $ROOT/
 
 | 输入 | 路径（相对 `$CUSTOM`） | SHA256 |
 |---|---|---|
-| 4.92 基线 AP | `build-4.92-quality-menu-20261105/patched/appFw.so` | `d17861657b062d4228ea74b31844bf7476cd82e3530c36b9b201f930c3df432f` |
-| 4.92 基线 CP | `build-4.92-quality-menu-20261105/patched/cpapp-b.bin` | `feececdcfdfff740324327eadedc863fc293e136b9b1db91cc8bc4e222f550c4` |
+| 5.01 基线 AP | `build-5.01-magnify-20261110/patched/appFw.so` | `1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751` |
+| 5.01 基线 CP | `build-5.01-magnify-20261110/patched/cpapp-b.bin` | `33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10` |
 
 最小最终产物（固定）：
 
 | 产物 | SHA256 |
 |---|---|
-| 最小最终 AP | `d17861657b062d4228ea74b31844bf7476cd82e3530c36b9b201f930c3df432f` |
-| 最小最终 CP | `feececdcfdfff740324327eadedc863fc293e136b9b1db91cc8bc4e222f550c4` |
+| 最小最终 AP | `1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751` |
+| 最小最终 CP | `33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10` |
 
 **不提供固定 DAT 哈希**：DAT 版本字段是容器编号，换编号后整包哈希会变。
 
@@ -91,15 +92,15 @@ python3 build_minimal.py
 
 脚本会：
 
-1. 读取项目 A 的 4.92 基线 AP/CP；
-2. 断言 AP `d178...`、CP `feecec...`；
+1. 读取项目 A 的 5.01 基线 AP/CP；
+2. 断言 AP `1a0480...`、CP `33b63...`；
 3. 直接复制为 `ap-build/appFw-minimal.NONINSTALLABLE.so` 和 `ap-build/cpapp-minimal.NONINSTALLABLE.bin`。
 
-4.92 基线已经包含扩展画幅、图标、AF 和重启修复；不在这里打额外补丁，也不添加调试钩子。
+5.01 基线已经包含扩展画幅、图标、RAW 预览比例修正、AF 和重启修复；不在这里打额外补丁，也不添加调试钩子。
 
 ## 4. 打包/签名/容器编号
 
-使用项目 A 现有的 package 流程（以 4.92 quality-menu 的 package 脚本为模板），把 AP/CP 输入替换为：
+使用项目 A 现有的 package 流程（以 5.01 raw-preview-magnify 的 package 脚本为模板），把 AP/CP 输入替换为：
 
 ```
 ap-build/appFw-minimal.NONINSTALLABLE.so
@@ -131,21 +132,21 @@ inspect('BODYDATA.DAT', Path('public.pem'), full=True)
 - 先完成两个基础项目的**签名旁路/刷写环境**；本仓库不提供绕过方法。
 - 只刷最终生成的单个 `BODYDATA.DAT`。
 - 测试：三个自定义比例分别关机开机；摇杆 AF；对焦放大进出；拍照/回放；切回原厂。
-- 出问题先恢复原厂/4.92 基线，不要连续刷多个自定义包。
+- 出问题先恢复原厂/5.01 基线，不要连续刷多个自定义包。
 
 ## 6. 常见失败
 
 | 现象 | 原因 | 处理 |
 |---|---|---|
-| 找不到 `build-4.92...` | 项目 A 没有 4.92 基线 | 先恢复项目 A 的 4.92 quality-menu 构建 |
+| 找不到 `build-5.01...` | 项目 A 没有 5.01 基线 | 先恢复项目 A 的 5.01 raw-preview-magnify 构建 |
 | AP/CP 哈希不对 | 基线不是预期 | 用本文件哈希对照 |
 | 签名/整包失败 | 私钥/原厂输入/打包环境不对 | 回项目 A/B 的签名旁路；不要自己生成密钥 |
 | 版本号被拒 | 容器编号不高于机内 | 换成任意更大的编号 |
 
 ## 7. 交付前检查
 
-- [ ] 4.92 基线 AP/CP 哈希匹配；
-- [ ] 最小最终 AP/CP 哈希匹配（`d178...` / `feecec...`）；
+- [ ] 5.01 基线 AP/CP 哈希匹配；
+- [ ] 最小最终 AP/CP 哈希匹配（`1a0480...` / `33b63...`）；
 - [ ] 容器编号是任意更高编号，且已记录；
 - [ ] `a7r5dat.tool.inspect(full=True)` 通过；
 - [ ] 不包含 RAW zoom 探针、私钥、Sony 原厂固件；

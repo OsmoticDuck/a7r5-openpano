@@ -1,23 +1,22 @@
 """Minimal active extended-aspect build.
 
-Uses the last full functional baseline that already includes the custom
-2:1 / 65:24 menu and playback icons (the 4.92 quality-menu base supplied by
-sony-a7r5-custom-firmware). That baseline already has the AF fixes and the
-bounded diagnostic hooks restored to the original instructions, so no binary
-patching is needed here.
+Uses the last functional baseline after the RAW preview aspect/geometry fix
+(the 5.01 raw-preview-magnify base supplied by sony-a7r5-custom-firmware).
+That baseline already contains the custom 2:1/65:24 icons, AF fixes, RAW
+preview ratio correction and the required restart/display fixes.
 
 No version number is assigned here. The firmware version is a container number
 chosen at packaging time (any value newer than the installed one).
 """
 from pathlib import Path
-import hashlib, json, os, shutil
+import hashlib, json, os
 
 H = Path(__file__).resolve().parent
 P = H.parent
-BASE_AP = P / "build-4.92-quality-menu-20261105/patched/appFw.so"
-BASE_CP = P / "build-4.92-quality-menu-20261105/patched/cpapp-b.bin"
-BASE_AP_SHA = "d17861657b062d4228ea74b31844bf7476cd82e3530c36b9b201f930c3df432f"
-BASE_CP_SHA = "feececdcfdfff740324327eadedc863fc293e136b9b1db91cc8bc4e222f550c4"
+BASE_AP = P / "build-5.01-magnify-20261110/patched/appFw.so"
+BASE_CP = P / "build-5.01-magnify-20261110/patched/cpapp-b.bin"
+BASE_AP_SHA = "1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751"
+BASE_CP_SHA = "33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10"
 FINAL_AP_SHA = BASE_AP_SHA
 FINAL_CP_SHA = BASE_CP_SHA
 
@@ -40,12 +39,12 @@ def main():
         final_AP_sha256=FINAL_AP_SHA,
         final_CP_sha256=FINAL_CP_SHA,
         base_is_final=True,
-        active_feature="extended aspect ratios 4..6, custom icons, AF and required restart/display fixes",
+        active_feature="extended aspect ratios 4..6, custom icons, AF, RAW preview ratio fix and required restart/display fixes",
         icons_installed=True,
         af_frame_fix_included=True,
-        debug_hooks_already_absent=True,
-        dead_diagnostic_code_retained=False,
+        raw_preview_ratio_fixed=True,
         raw_zoom_fix_included=False,
+        debug_hooks_already_absent=True,
         physical_camera_tested=False,
         all_issues_fixed=False,
     )
