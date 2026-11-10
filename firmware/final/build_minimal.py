@@ -1,7 +1,7 @@
 """Minimal active extended-aspect build.
 
-Uses the last functional baseline after the RAW preview aspect/geometry fix
-(the 5.01 raw-preview-magnify downstream base; not an upstream A/B release).
+Uses the current OpenPano downstream baseline
+(not an upstream A/B release).
 That baseline already contains the custom 2:1/65:24 icons, AF fixes, RAW
 preview ratio correction and the required restart/display fixes.
 
@@ -18,7 +18,7 @@ if raw_baseline:
     q = Path(raw_baseline)
     BASELINE = q if q.is_absolute() else (P / q)
 else:
-    BASELINE = P / "build-5.01-magnify-20261110"
+    BASELINE = P / "build-openpano"
 BASE_AP = BASELINE / "patched/appFw.so"
 BASE_CP = BASELINE / "patched/cpapp-b.bin"
 BASE_AP_SHA = "1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751"
@@ -34,12 +34,10 @@ def sha(b):
 def main():
     if not BASE_AP.exists() or not BASE_CP.exists():
         raise SystemExit(
-            "a7r5-openpano is not self-contained: the 5.01 AP/CP baseline is an external input, "
-            "not part of this GitHub folder. The current verified copy lives under the "
-            "downstream build workspace (local folder named sony-a7r5-custom-firmware) "
-            "build-5.01-magnify-20261110/patched directory, "
-            "but you can supply any verified copy via A7R5_BASELINE. Missing appFw.so "
-            "or cpapp-b.bin: stop and ask the user."
+            "a7r5-openpano is not self-contained: the OpenPano baseline is an external input, "
+            "not part of this GitHub folder. Supply the baseline directory via "
+            "A7R5_BASELINE (or place it under the downstream workspace as build-openpano). "
+            "Missing appFw.so or cpapp-b.bin: stop and ask the user."
         )
     ap = BASE_AP.read_bytes()
     cp = BASE_CP.read_bytes()

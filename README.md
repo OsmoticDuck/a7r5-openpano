@@ -6,32 +6,24 @@
 
 面向 Sony **ILCE-7RM5 / A7R V** 的扩展画幅自定义固件项目。这个 README 里只保留**画幅功能、菜单图标和调试**需要读的内容；构建、哈希、后端实现和给 AI 的提示词都在 [AI_BUILD.md](AI_BUILD.md)。
 
-## 先说明：5.01 只是基线编号
-
-- **5.01 不是 Sony 官方固件版本**，也不是最终必须保留的版本号；
-- 它是本项目当前的**下游基线/打包材料编号**，方便 AI 找到对应的 AP/CP；
-- 真正打包时，固件版本字段只是**容器编号**：填任意比机内当前版本更高的编号即可，最终固件内容固定，DAT 哈希随编号变化；
-- 后面的 5.01 AP/CP 哈希只用于**校验基线**，实际刷入的是最终生成的单个 `BODYDATA.DAT`；
-- 5.01 只是调试过程中逐步形成的下游基线编号，不要把它当成 Sony 发布版本。
-
 本仓库不是可直接刷入的固件，也不包含 Sony 固件、私钥、升级器或任何 `BODYDATA.DAT`。
 
-**本仓库不是 self-contained**：GitHub 文件夹只有文档、图标和 `firmware/final` 构建脚本，**不包含** 5.01 AP/CP、`package501.py`、`partition501.json`、`resources/`、原厂输入、升级器、公私钥或可刷 `BODYDATA.DAT`。5.01 是本项目的**下游构建产物**，不是上游 A 的发布；当前验证副本在下游构建工作区，也可以由用户从其他已验证副本提供（`A7R5_BASELINE`）。如果用户只有这个文件夹，AI 会先列出缺失项，无法单独生成固件。
+**本仓库不是 self-contained**：GitHub 文件夹只有文档、图标和 `firmware/final` 构建脚本，**不包含** OpenPano AP/CP、打包脚本、分区/资源材料、原厂输入、升级器、公私钥或可刷 `BODYDATA.DAT`。OpenPano 是本项目的**下游构建产物**，不是上游 A 的发布；当前验证副本在下游构建工作区，也可以由用户从其他已验证副本提供（`A7R5_BASELINE`）。如果用户只有这个文件夹，AI 会先列出缺失项，无法单独生成固件。
 
 > **风险提示**：自定义固件需要先绕过 Sony 签名校验；刷写错误可能导致相机无法开机，请让 AI 严格按照本仓库或相关基础项目的说明操作。本项目不提供签名密钥、不提供固件，也不对设备损坏负责。
 
 ## 上游项目链接
 
-- **A — [Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)**：Sony A7R V 的胶片/滤镜、声音自定义固件源；A 本身不含扩展画幅和 5.01。
+- **A — [Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)**：Sony A7R V 的胶片/滤镜、声音自定义固件源；A 本身不含扩展画幅和本项目的 OpenPano 基线。
 - **B — [Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)**：A7R5 Studio、DAT 工具、更新信任、libjit、ColorLab 等研究/验证工具；B 不是固件基线。
 
 ## 使用前必须完成的事项
 
 本仓库**不能单独使用**。请先准备并跑通：
 
-1. **[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)**（上游 A）：Sony A7R V 的胶片/滤镜、声音等自定义固件源与构建。A 本身不含扩展画幅、5.01、自制图标、AF 修正或 RAW 预览修正。
+1. **[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)**（上游 A）：Sony A7R V 的胶片/滤镜、声音等自定义固件源与构建。A 本身不含扩展画幅、OpenPano 基线、自制图标、AF 修正或 RAW 预览修正。
 2. **[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)**（上游 B）：A7R5 Studio、a7r5-dat-tool、更新信任、libjit、ColorLab 等 DAT/验证/相机工具。B 不是固件基线。
-3. **5.01 下游基线/打包材料**：由本项目在 **A 的上游胶片/滤镜源 + B 的工具**基础上构建；当前副本在本地**下游构建工作区**（文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。5.01 不包含 A 后续的声音版本内容。可以用 `A7R5_BASELINE` 指向其他已验证的同哈希副本。5.01 不在本 GitHub 文件夹，也不是 A 的发布。
+3. **OpenPano 下游基线/打包材料**：由本项目在 **A 的上游胶片/滤镜源 + B 的工具**基础上构建；当前副本在本地**下游构建工作区**（文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。OpenPano 基线不包含 A 后续的声音版本内容。可以用 `A7R5_BASELINE` 指向其他已验证的同哈希副本。OpenPano 不在本 GitHub 文件夹，也不是 A 的发布。
 
 具体工具链、命令和哈希见 [AI_BUILD.md](AI_BUILD.md)。
 
@@ -44,23 +36,23 @@
 > **选择从 A 开始构建，只是为了同时包含胶片预设；如果只想要自定义画幅、不要胶片预设，也可以从原版固件构建，但需要单独和 AI 说明。**
 
 - **功能上可以**：自定义画幅补丁本身不调用 A 的胶片/滤镜/声音逻辑；当前只是借 A 的上游胶片源作宿主。
-- **但不能直接拿当前 5.01 的 AP/CP 当“纯原版画幅包”**：5.01 建立在 A 的上游胶片源基础上（含 FL2/FL3、12 滤镜等），补丁地址、表、资源和验证链路都是按这个下游链路开发的。
+- **但不能直接拿当前 OpenPano 基线的 AP/CP 当“纯原版画幅包”**：OpenPano 建立在 A 的上游胶片源基础上（含 FL2/FL3、12 滤镜等），补丁地址、表、资源和验证链路都是按这个下游链路开发的。
 - **纯原版构建需要单独说明并重新移植**：原版 R5 AP/CP → 重新移植/重定位 aspect 补丁 → 重新生成图标/资源 → 重新做 AF/RAW 预览修正 → 用 B 的 DAT 工具签名/验证。它不是切换一个开关，而是新的 port；当前仓库没有这个纯原版构建，也没有验证过。
-- **结论**：只想要画幅、不要胶片预设，可以走原版构建，但必须单独告诉 AI；当前 5.01 不是那个包，不能把 5.01 直接减去 A。
+- **结论**：只想要画幅、不要胶片预设，可以走原版构建，但必须单独告诉 AI；当前 OpenPano 基线不是那个包，不能把 OpenPano 基线直接减去 A。
 
 ## 不懂代码怎么用
 
 把整个仓库（`README.md`、`AI_BUILD.md`、`firmware/final/`、`assets/icons/`）交给 AI，并对它说：
 
-> 请按 `AI_BUILD.md` 检查并构建 a7r5-openpano 的 5.01 基线固件；先核对哈希；缺基础项目、5.01 基线、原厂输入或密钥就问我；不要直接刷中间 AP/CP；不要声称 RAW 放大已修好。
+> 请按 `AI_BUILD.md` 检查并构建 a7r5-openpano 的 OpenPano 基线固件；先核对哈希；缺基础项目、OpenPano 基线、原厂输入或密钥就问我；不要直接刷中间 AP/CP；不要声称 RAW 放大已修好。
 >
-> 如果你只想要自定义画幅、不要胶片预设，请单独说明：我需要从原版固件重新移植/构建，不能直接套用 5.01。
+> 如果你只想要自定义画幅、不要胶片预设，请单独说明：我需要从原版固件重新移植/构建，不能直接套用 OpenPano 基线。
 
 AI 需要本机有：
 
 - [Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)（上游 A，胶片/声音固件源）；
 - [Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)（上游 B，DAT/Studio/信任工具）；
-- 5.01 下游基线（当前验证副本在下游构建工作区，也可由其他已验证副本提供）、原厂输入、升级器和签名材料。
+- OpenPano 下游基线（当前验证副本在下游构建工作区，也可由其他已验证副本提供）、原厂输入、升级器和签名材料。
 - 上游 A/B 的源码或工具环境（A 提供胶片/声音固件源，B 提供 DAT/信任/Studio 工具）。
 
 缺任何一项，让 AI 先列出来问你，不要自己造基线或密钥。
@@ -118,9 +110,13 @@ AI 需要本机有：
 ## 怎么使用
 
 1. **先让 AI 按 [AI_BUILD.md](AI_BUILD.md) 构建/打包**：需要两个基础项目和签名旁路；不要直接把中间文件拼进 DAT。
-2. 等基础项目、5.01 基线和签名环境都就绪、并成功打包后，才刷入最终生成的单个 `BODYDATA.DAT`。
+2. 等基础项目、OpenPano 基线和签名环境都就绪、并成功打包后，才刷入最终生成的单个 `BODYDATA.DAT`。
 3. 在菜单里选择自定义画幅，检查普通取景、对焦放大、拍摄和回放。
 4. 切回原厂画幅，确认原厂行为正常。
+
+## 关于版本号
+
+OpenPano 是当前基线名称，不是 Sony 固件版本。真正打包时，版本字段只是**容器编号**：填任意比机内当前版本更高的编号即可；最终固件内容固定，DAT 哈希随编号变化；以实际生成并验证的 DAT 为准。
 
 
 ## 调试/恢复

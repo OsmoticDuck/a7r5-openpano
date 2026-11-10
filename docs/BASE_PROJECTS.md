@@ -4,7 +4,7 @@
 
 1. 上游 A：[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)
 2. 上游 B：[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)
-3. 本项目的 **5.01 下游基线**
+3. 本项目的 **OpenPano 下游基线**
 
 ## 1. 上游 A — sony-a7r5-custom-firmware
 
@@ -12,7 +12,7 @@
 - 六槽回读/解放工具、声音包、滤镜 BIN、ColorLab 工作台；
 - 固件源码构建入口；原厂输入、外部签名材料和工具链由使用者按 A 的 README 准备。
 
-A **不包含**：扩展画幅、5.01、自制 2:1/65:24 图标、AF 修正、RAW 预览比例修正、RAW 放大研究。
+A **不包含**：扩展画幅、OpenPano、自制 2:1/65:24 图标、AF 修正、RAW 预览比例修正、RAW 放大研究。
 
 ## 2. 上游 B — a7r5-rea
 
@@ -21,9 +21,9 @@ A **不包含**：扩展画幅、5.01、自制 2:1/65:24 图标、AF 修正、RA
 - 更新信任环境、按需 SSH、libjit、ColorLab 等研究/打包工具；
 - 相机侧执行/读取环境；本构建不需要连接相机。
 
-B **不是固件基线**，不提供 5.01 AP/CP。
+B **不是固件基线**，不提供 OpenPano AP/CP。
 
-## 3. 5.01 下游基线
+## 3. OpenPano 下游基线
 
 - 本项目在 A 的上游胶片/滤镜源 + B 的工具基础上构建；
 - 不是 A 的发布，也不是 B 的发布；
@@ -39,7 +39,7 @@ B **不是固件基线**，不提供 5.01 AP/CP。
 - Sony 原厂固件、`BODYDATA.DAT`、升级器；
 - 私钥/公钥/签名材料；
 - 上游 A/B 的完整源码或工具；
-- 5.01 AP/CP、`package501.py`、`partition501.json`、`resources/`；
+- OpenPano AP/CP、`package-openpano 入口`、`分区材料`、`resources/`；
 - 中间调试版本、RAW 放大/弹窗探针；
 - 相机实机读取/刷写脚本。
 

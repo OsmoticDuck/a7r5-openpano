@@ -2,7 +2,7 @@
   "name": "a7r5-openpano",
   "container_version": "not fixed; choose any value newer than the installed firmware at packaging time",
   "base": {
-    "build": "build-5.01-magnify-20261110",
+    "build": "build-openpano",
     "AP_sha256": "1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751",
     "CP_sha256": "33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10"
   },
@@ -11,7 +11,7 @@
     "CP_sha256": "33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10"
   },
   "source_sha256": {
-    "firmware/final/build_minimal.py": "06ef0724c201f246c82267d68fb7d082c63c6f043bf3f913e5dc775ebcef53af"
+    "firmware/final/build_minimal.py": "04825a11e0142d8e5317c465c323ed889b25027bbdfcd40551b5d572a47eab00"
   },
   "base_is_final": true,
   "icons_installed": true,
@@ -20,9 +20,9 @@
   "debug_hooks_already_absent": true,
   "raw_zoom_fix_included": false,
   "notes": [
-    "The 5.01 raw-preview-magnify base already contains the custom 2:1/65:24 menu and playback icons.",
+    "The OpenPano raw-preview-magnify base already contains the custom 2:1/65:24 menu and playback icons.",
     "RAW preview aspect/geometry fix is included in the base; RAW playback zoom is still unresolved.",
     "No DAT hash is fixed: the version field is a container number.",
-    "The base is supplied by sony-a7r5-custom-firmware; this repo does not vendor Sony firmware or keys."
+    "The OpenPano baseline is supplied by the downstream build workspace; this repo does not vendor Sony firmware or keys."
   ]
 }

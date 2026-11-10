@@ -4,7 +4,7 @@
 
 | 文件 | 作用 |
 |---|---|
-| `final/build_minimal.py` | 读取本项目的 5.01 **下游**基线 AP/CP，校验后输出最小最终 AP/CP |
+| `final/build_minimal.py` | 读取本项目的 OpenPano **下游**基线 AP/CP，校验后输出最小最终 AP/CP |
 
 ## 构建
 
@@ -18,12 +18,12 @@ cd ext-aspect-minimal
 python3 build_minimal.py
 ```
 
-输入 = 最终（5.01 下游基线已经包含扩展画幅、自制图标、RAW 预览比例修正、AF 和重启修复）：
+输入 = 最终（OpenPano 下游基线已经包含扩展画幅、自制图标、RAW 预览比例修正、AF 和重启修复）：
 
-- AP：`build-5.01-magnify-20261110/patched/appFw.so`，SHA256 `1a048077...`
-- CP：`build-5.01-magnify-20261110/patched/cpapp-b.bin`，SHA256 `33b63f6b...`
+- AP：`build-openpano/patched/appFw.so`，SHA256 `1a048077...`
+- CP：`build-openpano/patched/cpapp-b.bin`，SHA256 `33b63f6b...`
 
-默认路径在下游构建工作区；也可以用 `A7R5_BASELINE` 指向其他同哈希副本。5.01 是本项目在 A 的固件源基础上、借助 B 的工具构建的下游基线，**不是 A 的发布**。
+默认路径在下游构建工作区；也可以用 `A7R5_BASELINE` 指向其他同哈希副本。OpenPano 是本项目在 A 的固件源基础上、借助 B 的工具构建的下游基线，**不是 A 的发布**。
 
 输出：
 
@@ -32,7 +32,7 @@ python3 build_minimal.py
 
 ## 图标
 
-5.01 下游基线的菜单/回放资源已经安装自制 2:1、65:24 图标；`assets/icons/` 是源文件/备份。2.35:1 用原厂图标。
+OpenPano 下游基线的菜单/回放资源已经安装自制 2:1、65:24 图标；`assets/icons/` 是源文件/备份。2.35:1 用原厂图标。
 
 ## 未解决
 
