@@ -7,7 +7,7 @@
 ## 0.1 用户把项目交给你时，先做这些
 
 - 你是操作者；用户不需要懂代码。
-- 先确认 `$CUSTOM/build-5.01-magnify-20261110/patched/appFw.so` 和 `cpapp-b.bin` 存在且哈希匹配；没有就请用户提供基础项目 A 的 5.01 基线，不要自己造基线。
+- 5.01 基线是**外部构建产物**，不是项目 A 的固有属性，也不在本 GitHub 文件夹里；当前验证副本在项目 A 的 `build-5.01-magnify-20261110/patched/`。如果用户从别处拿到同一哈希的 5.01 AP/CP，可以用 `A7R5_BASELINE` 指向它（绝对路径，或相对于项目 A 的路径）。先检查 `appFw.so`/`cpapp-b.bin` 存在且哈希匹配；没有就请用户提供，不要自己造基线。
 - 确认项目 A 的原厂输入/升级器/公私钥、`raw-zoom-magnify-501-20261110/package501.py`、`partition501.json`、`resources/` 都在；缺什么直接问用户，不要生成密钥或替换成未验证版本。
 - 最终 AP/CP 与 5.01 基线**逐字节相同**；本项目不修 RAW 放大弹窗，不要声称修好。
 - 只刷最终单个 `BODYDATA.DAT`；不要刷中间 AP/CP。
@@ -32,7 +32,7 @@ $ROOT/
 ### 1.1 sony-a7r5-custom-firmware（项目 A）
 
 - 原厂/自定义固件提取、打包、FDAT/RSA 签名、AES 整包；
-- 项目 A 的 **5.01 raw-preview-magnify 基线**（本仓库 `build_minimal.py` 读取它的 `patched/appFw.so` / `patched/cpapp-b.bin`）；
+- **5.01 raw-preview-magnify 基线**：外部构建产物；当前验证副本在项目 A（`build-5.01-magnify-20261110/patched/`），但 `build_minimal.py` 也支持用 `A7R5_BASELINE` 指向任何同哈希副本；本仓库不包含它；
 - 该基线已经包含扩展画幅、自制菜单/回放图标、AF 修正和重启/显示修复；
 - `feature-extension-436/result/source`、`package.py`/现有 package 脚本；
 - 原厂 DAT、升级器、公私钥、原始输入。
@@ -76,8 +76,8 @@ $ROOT/
 
 | 输入 | 路径（相对 `$CUSTOM`） | SHA256 |
 |---|---|---|
-| 5.01 基线 AP | `build-5.01-magnify-20261110/patched/appFw.so` | `1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751` |
-| 5.01 基线 CP | `build-5.01-magnify-20261110/patched/cpapp-b.bin` | `33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10` |
+| 5.01 基线 AP（默认路径；可用 `A7R5_BASELINE` 覆盖） | `build-5.01-magnify-20261110/patched/appFw.so` | `1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751` |
+| 5.01 基线 CP（默认路径；可用 `A7R5_BASELINE` 覆盖） | `build-5.01-magnify-20261110/patched/cpapp-b.bin` | `33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10` |
 
 最小最终产物（固定）：
 
@@ -102,7 +102,7 @@ python3 build_minimal.py
 
 脚本会：
 
-1. 读取项目 A 的 5.01 基线 AP/CP；
+1. 读取 5.01 基线 AP/CP（默认项目 A 路径；`A7R5_BASELINE` 可指向其他已验证副本）；
 2. 断言 AP `1a0480...`、CP `33b63...`；
 3. 直接复制为 `ap-build/appFw-minimal.NONINSTALLABLE.so` 和 `ap-build/cpapp-minimal.NONINSTALLABLE.bin`。
 

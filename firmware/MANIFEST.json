@@ -11,7 +11,7 @@
     "CP_sha256": "33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10"
   },
   "source_sha256": {
-    "firmware/final/build_minimal.py": "2d337d8dcbc96aed54a2ac4dc9df17f48376ad3bd8956a03bd93904abc7bb523"
+    "firmware/final/build_minimal.py": "5e4f35d2379394217ca090ae5b074241e1494d430e17b974b35afd0ebea202a9"
   },
   "base_is_final": true,
   "icons_installed": true,

@@ -13,8 +13,14 @@ import hashlib, json, os
 
 H = Path(__file__).resolve().parent
 P = H.parent
-BASE_AP = P / "build-5.01-magnify-20261110/patched/appFw.so"
-BASE_CP = P / "build-5.01-magnify-20261110/patched/cpapp-b.bin"
+raw_baseline = os.environ.get("A7R5_BASELINE")
+if raw_baseline:
+    q = Path(raw_baseline)
+    BASELINE = q if q.is_absolute() else (P / q)
+else:
+    BASELINE = P / "build-5.01-magnify-20261110"
+BASE_AP = BASELINE / "patched/appFw.so"
+BASE_CP = BASELINE / "patched/cpapp-b.bin"
 BASE_AP_SHA = "1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751"
 BASE_CP_SHA = "33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10"
 FINAL_AP_SHA = BASE_AP_SHA
@@ -28,10 +34,11 @@ def sha(b):
 def main():
     if not BASE_AP.exists() or not BASE_CP.exists():
         raise SystemExit(
-            "a7r5-openpano is not self-contained: the 5.01 AP/CP baseline is supplied by "
-            "sony-a7r5-custom-firmware and is not in this GitHub folder. "
-            "Provide the base project (build-5.01-magnify-20261110/patched/appFw.so and "
-            "cpapp-b.bin) or stop and ask the user."
+            "a7r5-openpano is not self-contained: the 5.01 AP/CP baseline is an external input, "
+            "not part of this GitHub folder. The current verified copy lives under the "
+            "sony-a7r5-custom-firmware build-5.01-magnify-20261110/patched directory, "
+            "but you can supply any verified copy via A7R5_BASELINE. Missing appFw.so "
+            "or cpapp-b.bin: stop and ask the user."
         )
     ap = BASE_AP.read_bytes()
     cp = BASE_CP.read_bytes()
