@@ -1,0 +1,156 @@
+{
+  "passed": true,
+  "firmware_modified": false,
+  "DAT_packaged": false,
+  "icons": [
+    {
+      "name": "play-2x1",
+      "width": 47,
+      "height": 32,
+      "png_sha256": "75fd32ca1fff898119aea6e9f876861f62c9d86ef38443ad6f37b9750296dc55",
+      "rgba4444_sha256": "bb341c416e0be1f635ac2d99f9f0f6e9fd5df293017e2970d6f20cdd4a8c041b",
+      "stride_pixels": 48,
+      "glyph_positions": [
+        [
+          10,
+          7,
+          10,
+          18
+        ],
+        [
+          22,
+          7,
+          5,
+          18
+        ],
+        [
+          29,
+          7,
+          7,
+          18
+        ]
+      ],
+      "original_border_and_alpha_preserved": true,
+      "rgba4444_pixel_roundtrip_exact": true
+    },
+    {
+      "name": "menu-2x1",
+      "width": 76,
+      "height": 40,
+      "png_sha256": "5f7d0cf2e2b381fed8a888c959e8e9a8b891ed34547eef31d98aba15689e9a95",
+      "rgba4444_sha256": "70de99420313b6ba60bf97779ea13c8913198e3263a87d274d16ffd5e05863db",
+      "stride_pixels": 80,
+      "glyph_positions": [
+        [
+          23,
+          10,
+          12,
+          20
+        ],
+        [
+          38,
+          10,
+          3,
+          20
+        ],
+        [
+          44,
+          10,
+          8,
+          20
+        ]
+      ],
+      "original_border_and_alpha_preserved": true,
+      "rgba4444_pixel_roundtrip_exact": true
+    },
+    {
+      "name": "play-65x24",
+      "width": 47,
+      "height": 32,
+      "png_sha256": "85795be450109f301c3be9380f7a41408e2eec5318d277a489bbbc090e8b8f2f",
+      "rgba4444_sha256": "025b8097b306f31a2c9b8764d296611311a413aa983709df514696becf79c3fa",
+      "stride_pixels": 48,
+      "glyph_positions": [
+        [
+          7,
+          7,
+          7,
+          17
+        ],
+        [
+          15,
+          7,
+          6,
+          17
+        ],
+        [
+          22,
+          7,
+          2,
+          17
+        ],
+        [
+          25,
+          7,
+          7,
+          17
+        ],
+        [
+          33,
+          7,
+          7,
+          17
+        ]
+      ],
+      "original_border_and_alpha_preserved": true,
+      "rgba4444_pixel_roundtrip_exact": true
+    },
+    {
+      "name": "menu-65x24",
+      "width": 76,
+      "height": 40,
+      "png_sha256": "75cc58734bdcb81001d6c0d39a295f185ce4ea2c98108cc7fa8d00b8c7e35221",
+      "rgba4444_sha256": "530bb22d4090a0a4e4b19ed7dabfe7439c81039f7dfd2aa10843a16b77af11bb",
+      "stride_pixels": 80,
+      "glyph_positions": [
+        [
+          21,
+          10,
+          7,
+          20
+        ],
+        [
+          29,
+          10,
+          6,
+          20
+        ],
+        [
+          36,
+          10,
+          2,
+          20
+        ],
+        [
+          39,
+          10,
+          7,
+          20
+        ],
+        [
+          47,
+          10,
+          7,
+          20
+        ]
+      ],
+      "original_border_and_alpha_preserved": true,
+      "rgba4444_pixel_roundtrip_exact": true
+    }
+  ],
+  "regular_2_and_1_exact_pixel_crops": true,
+  "thin_2_and_5_native_playback235_crops": true,
+  "thin_6_and_4": "BOX condensed from native16:9 digit6 and4:3 digit4;native34 foreground matched to235 black0;17-step quantization",
+  "preview_labels_only_use_Helvetica": true,
+  "original_resource_metadata": "original-icons.json"
+}

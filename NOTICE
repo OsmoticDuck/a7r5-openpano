@@ -15,6 +15,10 @@ It does **not** contain, and does not license:
 Sony, ILCE-7RM5, A7R V and related names are trademarks of Sony Group
 Corporation. This project is not affiliated with or endorsed by Sony.
 
+The custom aspect icons in assets/icons are original compositions that use
+pixel crops/shapes from the camera UI; Sony original image files are not
+included. They are for personal use with this project.
+
 The script contains addresses and hook-restoration patches derived from
 analysis of a locally obtained firmware image. It is provided for research and
 personal use only. Users are responsible for complying with applicable laws,
