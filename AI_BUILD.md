@@ -4,6 +4,15 @@
 
 > 本仓库只保留实现扩展画幅的最小功能，不展开中间调试版本。先读 [README.md](README.md)。
 
+## 0.1 用户把项目交给你时，先做这些
+
+- 你是操作者；用户不需要懂代码。
+- 先确认 `$CUSTOM/build-5.01-magnify-20261110/patched/appFw.so` 和 `cpapp-b.bin` 存在且哈希匹配；没有就请用户提供基础项目 A 的 5.01 基线，不要自己造基线。
+- 确认项目 A 的原厂输入/升级器/公私钥、`raw-zoom-magnify-501-20261110/package501.py`、`partition501.json`、`resources/` 都在；缺什么直接问用户，不要生成密钥或替换成未验证版本。
+- 最终 AP/CP 与 5.01 基线**逐字节相同**；本项目不修 RAW 放大弹窗，不要声称修好。
+- 只刷最终单个 `BODYDATA.DAT`；不要刷中间 AP/CP。
+- 如果用户不想重新打包，项目 A 已有 `ready-5.01-magnify-20261110/BODYDATA.DAT`（版本字段 5.01）；需要用更高容器编号时再走 package501 流程。
+
 ## 0. 路径
 
 ```
@@ -100,14 +109,22 @@ python3 build_minimal.py
 
 ## 4. 打包/签名/容器编号
 
-使用项目 A 现有的 package 流程（以 5.01 raw-preview-magnify 的 package 脚本为模板），把 AP/CP 输入替换为：
+使用项目 A 的 5.01 package 入口：
 
-```
-ap-build/appFw-minimal.NONINSTALLABLE.so
-ap-build/cpapp-minimal.NONINSTALLABLE.bin
+```bash
+cd "$CUSTOM/raw-zoom-magnify-501-20261110"
+# package501.py 已使用与最小最终 AP/CP 相同的 5.01 AP/CP 和 partition501/resources
+python3 package501.py
 ```
 
-并更新打包元数据中的 `AP_sha256` / `CP_sha256`。
+说明：
+
+- 最小最终 AP/CP 与 5.01 基线逐字节相同，所以 `package501.py` 可以直接使用；不需要改 AP/CP；
+- `package501.py` 的默认版本是 5.01，输出目录 `build-5.01-magnify-20261110` 可能已存在；如果已存在，先用项目 A 的 `ready-5.01-magnify-20261110/BODYDATA.DAT`，或按 `prepare_version501.py` 的方式把容器编号改成任意更高的编号（只改版本字段，不改 AP/CP/分区）；
+- 打包后必须独立验证；
+- 不要直接把 PNG 图标或 AP/CP 塞进 DAT。
+
+如果用户只需要现成的 5.01 功能固件，项目 A 的 `ready-5.01-magnify-20261110/BODYDATA.DAT` 就是本基线；本仓库的构建用于核对/重打包。
 
 ### 4.1 版本号只是容器编号
 
