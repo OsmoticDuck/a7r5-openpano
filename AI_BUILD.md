@@ -8,14 +8,14 @@
 
 - 你是操作者；用户不需要懂代码。
 - **先分清三个东西**：
-  - 上游 A：[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware) — 胶片/滤镜、声音等自定义固件源；**A 本身没有扩展画幅、OpenPano、自制图标、AF 修正或 RAW 预览修正**。
+  - 上游 A：[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware) — 胶片/滤镜、声音等自定义固件源；**A 本身没有扩展画幅、OpenPano 基线、自制图标、AF 修正或 RAW 预览修正**。
   - 上游 B：[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea) — A7R5 Studio、a7r5-dat-tool、更新信任、libjit、ColorLab 等 DAT/验证/相机工具；**B 不是固件基线**。
   - **OpenPano 下游基线**：本项目在 A 的固件源基础上、借助 B 的工具构建的扩展画幅基线；当前副本在**下游构建工作区**（本机文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。OpenPano 不在本 GitHub 文件夹，也不是 A 的发布。
 - OpenPano 基线是外部输入；如果用户从别处拿到同哈希 AP/CP，可用 `A7R5_BASELINE` 指向（绝对路径，或相对于下游构建工作区的路径）。
 - 缺以下任何一项就停止并问用户，不要自己造基线/密钥：
   - A/B 的源码或工具环境；
   - OpenPano 下游 AP/CP（`1a0480...` / `33b63...`）；
-  - `package-openpano 入口`、`分区材料`、`resources/`、原厂输入、升级器、签名材料。
+  - OpenPano package 入口、分区/资源材料、原厂输入、升级器、签名材料。
 - 最终 AP/CP 与 OpenPano 下游基线**逐字节相同**；本项目不修 RAW 放大弹窗，不要声称修好。
 - **A 只用于胶片/滤镜/声音；自定义画幅逻辑不依赖 A**。当前 OpenPano 是在 A 的上游胶片源 + 本项目下游构建材料上形成的；不要把它说成 A/B 的发布。如果用户要求“只从原版固件、不要胶片预设”，不要拿 OpenPano 冒充，也不要直接删 A 的资源；必须说明需要把 aspect 补丁重新移植到原版 R5 AP/CP，并重新做图标、AF、RAW 预览和打包验证。这个纯原版 port 当前不存在。
 - 只刷最终单个 `BODYDATA.DAT`；不要刷中间 AP/CP。
@@ -33,9 +33,9 @@ $ROOT/
 
 - `$A` = A 的克隆（上游 A）。
 - `$B` = `$ROOT/a7r5/a7r5-rea`（上游 B）。
-- `$BUILD` = 下游构建工作区（当前本机文件夹名可能是 `sony-a7r5-custom-firmware`；包含 `build-openpano` 和 `package-openpano`）。**它不是 A 的 GitHub 仓库。**
+- `$BUILD` = 下游构建工作区（当前本机文件夹名可能是 `sony-a7r5-custom-firmware`）；它应包含 `build-openpano`（或由 `A7R5_BASELINE` 指向 OpenPano 基线），打包材料目录可能是 `package-openpano` 或现有 package 目录。**它不是 A 的 GitHub 仓库。**
 
-> 名字冲突很容易误导：A 的 GitHub 仓库叫 `sony-a7r5-custom-firmware`，本机下游工作区也可能叫这个名。执行前先确认路径里有没有 `build-openpano` 和 `package-openpano`；只有它们才是下游基线。
+> 名字冲突很容易误导：A 的 GitHub 仓库叫 `sony-a7r5-custom-firmware`，本机下游工作区也可能叫这个名。执行前先确认 `build-openpano`（或 `A7R5_BASELINE` 指向的目录）是 OpenPano 基线；package 入口只是打包材料，不是基线本身；目录名以实际工作区为准。
 
 ## 1. [上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware) 负责什么
 
@@ -181,7 +181,7 @@ inspect('BODYDATA.DAT', Path('public.pem'), full=True)
 
 | 现象 | 原因 | 处理 |
 |---|---|---|
-| 找不到 `build-OpenPano...` | 下游构建工作区没有 OpenPano | 让用户提供下游 OpenPano AP/CP，或用 `A7R5_BASELINE` |
+| 找不到 `build-openpano` | 下游构建工作区没有 OpenPano 基线 | 让用户提供 OpenPano AP/CP，或用 `A7R5_BASELINE` 指向 |
 | 找不到 A/B 源码或工具 | [上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[上游 B](https://github.com/Liwenru88/a7r5-rea) 未准备 | 按 [A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[B](https://github.com/Liwenru88/a7r5-rea) README 准备；缺什么问用户 |
 | AP/CP 哈希不对 | 基线不是预期 | 用本文件哈希对照 |
 | 签名/整包失败 | 私钥/原厂输入/打包环境不对 | 回 A/B 的签名旁路；不要自己生成密钥 |
