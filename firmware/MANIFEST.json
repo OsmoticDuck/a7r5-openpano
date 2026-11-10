@@ -6,20 +6,22 @@
     "CP_sha256": "1bcdddcff45ac551d36f0992955e2ffb0c1c54c3d12d3f0c37d0cfb306146f84"
   },
   "final": {
-    "AP_sha256": "e9b58ccb6fdc76789743eb1fe94ae22760c7f707f0b61c036a06e128a0b19f1f",
+    "AP_sha256": "30f556e7c106b5aabb0b06127c08cbdc81229a02f440f1bf6b771038410beb6c",
     "CP_sha256": "1bcdddcff45ac551d36f0992955e2ffb0c1c54c3d12d3f0c37d0cfb306146f84"
   },
   "source_sha256": {
-    "firmware/final/build_minimal.py": "48f27735ce309488a94de7363b7ef07eb2a442a888e94dbb0f7d6736dec630d1"
+    "firmware/final/build_minimal.py": "07b52fba19269cca10ed6efa01db4fe8c21ff1eb72f88a0dcd626261d7d7a0c5"
   },
   "debug_hooks_disabled": [
     "bounded fatal-signal recorder: assert/fatal/request/set/sequence",
     "AF RAM observer"
   ],
   "dead_diagnostic_code_retained": true,
-  "af_frame_fix_included": false,
+  "af_frame_fix_included": true,
+  "raw_zoom_fix_included": false,
   "notes": [
     "Only the minimal active extended-aspect build is included.",
+    "AF display source fix (4B) is included; RAW playback zoom is still unresolved.",
     "No DAT hash is fixed: the version field is a container number.",
     "The last functional base is supplied by sony-a7r5-custom-firmware; this repo does not vendor Sony firmware or keys."
   ]

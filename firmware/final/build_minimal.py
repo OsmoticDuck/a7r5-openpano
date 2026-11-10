@@ -18,8 +18,11 @@ from elftools.elf.elffile import ELFFile
 BASE_AP = P / "build-4.85-liveview-20261104/patched/appFw.so"
 BASE_CP = P / "build-4.85-liveview-20261104/patched/cpapp-b.bin"
 BASE_AP_SHA = "9f947f68bec0d6a5140a5d31078ed5cdda920c7b25c656fb619d953eb4833e7a"
-FINAL_AP_SHA = "e9b58ccb6fdc76789743eb1fe94ae22760c7f707f0b61c036a06e128a0b19f1f"
+FINAL_AP_SHA = "30f556e7c106b5aabb0b06127c08cbdc81229a02f440f1bf6b771038410beb6c"
 FINAL_CP_SHA = "1bcdddcff45ac551d36f0992955e2ffb0c1c54c3d12d3f0c37d0cfb306146f84"
+AF_AT = 0x16d82f0
+AF_BEFORE = bytes.fromhex("01008052")
+AF_AFTER = bytes.fromhex("815a40b9")
 
 # (VA, expected current, original instruction, why)
 RESTORE = [
@@ -54,6 +57,9 @@ def main():
         o = off(elf, va)
         assert out[o:o + 4].hex() == current, (hex(va), out[o:o + 4].hex(), current)
         out[o:o + 4] = bytes.fromhex(original)
+    af_o = off(elf, AF_AT)
+    assert out[af_o:af_o + 4] == AF_BEFORE
+    out[af_o:af_o + 4] = AF_AFTER
     assert sha(out) == FINAL_AP_SHA
     (H / "ap-build").mkdir(exist_ok=True)
     (H / "ap-build/appFw-minimal.NONINSTALLABLE.so").write_bytes(out)
@@ -63,11 +69,12 @@ def main():
         base_AP_sha256=BASE_AP_SHA,
         final_AP_sha256=FINAL_AP_SHA,
         final_CP_sha256=FINAL_CP_SHA,
-        active_feature="extended aspect ratios 4..6 and required restart/display fixes",
+        active_feature="extended aspect ratios 4..6, required restart/display fixes, and the final AF source fix",
         debug_hooks_disabled=[dict(va=hex(va), current=current, original=original, why=why) for va, current, original, why in RESTORE],
         dead_diagnostic_code_retained=True,
         full_relink_without_dead_code=False,
-        af_frame_fix_included=False,
+        af_frame_fix_included=True,
+        raw_zoom_fix_included=False,
         physical_camera_tested=False,
         all_issues_fixed=False,
     )

@@ -45,7 +45,8 @@ README 只讲用户看到的功能；构建/后端细节在下面。
 - 已合并的重启/显示修复：菜单资源、AF 边界/glyph、FC/YUV、CWB、自动布局、显示校准、规则 NOT_SET、图标、源格式、网格/菜单 getter、追踪、AF 窗口、MF/回放共用 PID3019、菜单所有权、回放表交接、CP selector；
 - 最小构建关闭 5 个有界异常记录器钩子和 AF RAM 观察器钩子（不是扩展画幅的必要条件）；
 - 死代码仍在基础镜像中，但没有活动调用；完整删除需要重新链接，本仓库未提供；
-- 最终 AP/CP 哈希见第 2 节；AF 框修正的 4B 源类别修正**不在**本最小版本。
+- 最终 AP/CP 哈希见第 2 节；AF 框的 4B 源类别修正**已包含**（读取真实源类别，而不是固定全传感器类别）。
+- **未解决**：自定义画幅 RAW 回放放大仍会提示“无法放大”。此前诊断确认 AP 的 read/availability/descriptor 均成功；caution finder、四个直接 `0x0207a042` 构造点、`0x18992f4` 对话框键都未命中；最后一次 caution 入口钩子导致启动循环，已作废。该问题不在本最小版本内修复。
 
 ### 1.4 自制画幅图标
 
@@ -75,7 +76,7 @@ README 只讲用户看到的功能；构建/后端细节在下面。
 
 | 产物 | SHA256 |
 |---|---|
-| 最小最终 AP | `e9b58ccb6fdc76789743eb1fe94ae22760c7f707f0b61c036a06e128a0b19f1f` |
+| 最小最终 AP | `30f556e7c106b5aabb0b06127c08cbdc81229a02f440f1bf6b771038410beb6c` |
 | 最小最终 CP | `1bcdddcff45ac551d36f0992955e2ffb0c1c54c3d12d3f0c37d0cfb306146f84` |
 
 **不提供固定 DAT 哈希**：DAT 版本字段是容器编号，换编号后整包哈希会变。
@@ -96,7 +97,8 @@ python3 build_minimal.py
 
 1. 读取项目 A 的最后功能基线 AP/CP；
 2. 恢复并关闭 5 个有界异常记录器钩子 + 1 个 AF RAM 观察器钩子（这些不是扩展画幅所必需）；
-3. 输出 `ap-build/appFw-minimal.NONINSTALLABLE.so`（`e9b58c...`）和 `ap-build/cpapp-minimal.NONINSTALLABLE.bin`（`1bcddd...`）。
+3. 在 `0x16d82f0` 应用 AF 显示类别的 4B 修正（`01008052` → `815a40b9`）；
+4. 输出 `ap-build/appFw-minimal.NONINSTALLABLE.so`（`30f556...`）和 `ap-build/cpapp-minimal.NONINSTALLABLE.bin`（`1bcddd...`）。
 
 调试钩子关闭后，基础镜像里的死代码仍在，但没有活动调用；完整删除死代码需要重新链接，本仓库未提供。
 
@@ -149,8 +151,8 @@ inspect('BODYDATA.DAT', Path('public.pem'), full=True)
 ## 7. 交付前检查
 
 - [ ] 基线 AP/CP 哈希匹配；
-- [ ] 最小最终 AP/CP 哈希匹配（`e9b58c...` / `1bcddd...`）；
+- [ ] 最小最终 AP/CP 哈希匹配（`30f556...` / `1bcddd...`）；
 - [ ] 容器编号是任意更高编号，且已记录；
 - [ ] `a7r5dat.tool.inspect(full=True)` 通过；
 - [ ] 不包含 RAW 放大/弹窗探针、私钥、Sony 原厂固件；
-- [ ] 明确告知用户：AF 框修正不在本最小版本内，未实机验证的部分不得声称已解决。
+- [ ] 明确告知用户：AF 框修正已包含；自定义画幅 RAW 回放放大仍未解决，未实机验证的部分不得声称已解决。
