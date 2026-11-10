@@ -8,7 +8,7 @@
 
 本仓库不是可直接刷入的固件，也不包含 Sony 固件、私钥、升级器或任何 `BODYDATA.DAT`。
 
-**本仓库不是 self-contained**：GitHub 文件夹只有文档、图标和 `firmware/final` 构建脚本，**不包含** OpenPano AP/CP、打包脚本、分区/资源材料、原厂输入、升级器、公私钥或可刷 `BODYDATA.DAT`。OpenPano 是本项目的**下游构建产物**，不是[上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)的发布；当前验证副本在下游构建工作区，也可以由用户从其他已验证副本提供（`A7R5_BASELINE`）。如果用户只有这个文件夹，AI 会先列出缺失项，无法单独生成固件。
+**本仓库不是 self-contained**：GitHub 文件夹只有文档、图标和 `firmware/final` 构建脚本，**不包含** OpenPano AP/CP、打包脚本、分区/资源材料、原厂输入、升级器、公私钥或可刷 `BODYDATA.DAT`。OpenPano 是本项目的**下游构建产物**，不是[上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)的发布；当前验证副本在下游构建工作区，也可以由用户从其他已验证副本提供（`OPENPANO_BASELINE`）。如果用户只有这个文件夹，AI 会先列出缺失项，无法单独生成固件。
 
 > **风险提示**：自定义固件需要先绕过 Sony 签名校验；刷写错误可能导致相机无法开机，请让 AI 严格按照本仓库或相关基础项目的说明操作。本项目不提供签名密钥、不提供固件，也不对设备损坏负责。
 
@@ -23,7 +23,7 @@
 
 1. **[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)**（上游 A）：Sony A7R V 的胶片/滤镜、声音等自定义固件源与构建。A 本身不含扩展画幅、OpenPano 基线、自制图标、AF 修正或 RAW 预览修正。
 2. **[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)**（上游 B）：A7R5 Studio、a7r5-dat-tool、更新信任、libjit、ColorLab 等 DAT/验证/相机工具。B 不是固件基线。
-3. **OpenPano 下游基线/打包材料**：由本项目在 **A 的上游胶片/滤镜源 + B 的工具**基础上构建；当前副本在本地**下游构建工作区**（文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。OpenPano 基线不包含 A 后续的声音版本内容。可以用 `A7R5_BASELINE` 指向其他已验证的同哈希副本。OpenPano 不在本 GitHub 文件夹，也不是 A 的发布。
+3. **OpenPano 下游基线/打包材料**：由本项目在 **A 的上游胶片/滤镜源 + B 的工具**基础上构建；当前副本在本地**下游构建工作区**（文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。OpenPano 基线不包含 A 后续的声音版本内容。可以用 `OPENPANO_BASELINE` 指向其他已验证的同哈希副本。OpenPano 不在本 GitHub 文件夹，也不是 A 的发布。
 
 具体工具链、命令和哈希见 [AI_BUILD.md](AI_BUILD.md)。
 

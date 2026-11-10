@@ -11,7 +11,7 @@
   - 上游 A：[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware) — 胶片/滤镜、声音等自定义固件源；**A 本身没有扩展画幅、OpenPano 基线、自制图标、AF 修正或 RAW 预览修正**。
   - 上游 B：[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea) — A7R5 Studio、a7r5-dat-tool、更新信任、libjit、ColorLab 等 DAT/验证/相机工具；**B 不是固件基线**。
   - **OpenPano 下游基线**：本项目在 A 的固件源基础上、借助 B 的工具构建的扩展画幅基线；当前副本在**下游构建工作区**（本机文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。OpenPano 不在本 GitHub 文件夹，也不是 A 的发布。
-- OpenPano 基线是外部输入；如果用户从别处拿到同哈希 AP/CP，可用 `A7R5_BASELINE` 指向（绝对路径，或相对于下游构建工作区的路径）。
+- OpenPano 基线是外部输入；如果用户从别处拿到同哈希 AP/CP，可用 `OPENPANO_BASELINE` 指向（绝对路径，或相对于下游构建工作区的路径）。
 - 缺以下任何一项就停止并问用户，不要自己造基线/密钥：
   - A/B 的源码或工具环境；
   - OpenPano 下游 AP/CP（`1a0480...` / `33b63...`）；
@@ -33,9 +33,9 @@ $ROOT/
 
 - `$A` = A 的克隆（上游 A）。
 - `$B` = `$ROOT/a7r5/a7r5-rea`（上游 B）。
-- `$BUILD` = 下游构建工作区（当前本机文件夹名可能是 `sony-a7r5-custom-firmware`）；它应包含 `build-openpano`（或由 `A7R5_BASELINE` 指向 OpenPano 基线），打包材料目录可能是 `package-openpano` 或现有 package 目录。**它不是 A 的 GitHub 仓库。**
+- `$BUILD` = 下游构建工作区（当前本机文件夹名可能是 `sony-a7r5-custom-firmware`）；它应包含 `build-openpano`（或由 `OPENPANO_BASELINE` 指向 OpenPano 基线），打包材料目录可能是 `package-openpano` 或现有 package 目录。**它不是 A 的 GitHub 仓库。**
 
-> 名字冲突很容易误导：A 的 GitHub 仓库叫 `sony-a7r5-custom-firmware`，本机下游工作区也可能叫这个名。执行前先确认 `build-openpano`（或 `A7R5_BASELINE` 指向的目录）是 OpenPano 基线；package 入口只是打包材料，不是基线本身；目录名以实际工作区为准。
+> 名字冲突很容易误导：A 的 GitHub 仓库叫 `sony-a7r5-custom-firmware`，本机下游工作区也可能叫这个名。执行前先确认 `build-openpano`（或 `OPENPANO_BASELINE` 指向的目录）是 OpenPano 基线；package 入口只是打包材料，不是基线本身；目录名以实际工作区为准。
 
 ## 1. [上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware) 负责什么
 
@@ -69,7 +69,7 @@ OpenPano 是本项目在 A 的固件源基础上、借助 B 的工具构建出�
 
 - 不是 A 的发布，也不是 B 的发布；
 - 当前验证副本在下游构建工作区 `$BUILD/build-openpano/patched/`；它是本项目的下游构建材料，不是 A/B 的发布；
-- 本仓库不包含它；也可以用 `A7R5_BASELINE` 指向其他同哈希副本；
+- 本仓库不包含它；也可以用 `OPENPANO_BASELINE` 指向其他同哈希副本；
 - 已包含：扩展画幅、2:1/65:24 自制图标、AF 修正、RAW 预览比例修正、重启/显示修复；
 - 唯一未解决：自定义画幅 RAW 回放放大仍提示“无法放大”。
 
@@ -104,8 +104,8 @@ OpenPano 是本项目在 A 的固件源基础上、借助 B 的工具构建出�
 
 | 输入 | 路径（相对 `$BUILD`） | SHA256 |
 |---|---|---|
-| OpenPano 下游 AP（默认路径；可用 `A7R5_BASELINE` 覆盖） | `build-openpano/patched/appFw.so` | `1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751` |
-| OpenPano 下游 CP（默认路径；可用 `A7R5_BASELINE` 覆盖） | `build-openpano/patched/cpapp-b.bin` | `33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10` |
+| OpenPano 下游 AP（默认路径；可用 `OPENPANO_BASELINE` 覆盖） | `build-openpano/patched/appFw.so` | `1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751` |
+| OpenPano 下游 CP（默认路径；可用 `OPENPANO_BASELINE` 覆盖） | `build-openpano/patched/cpapp-b.bin` | `33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10` |
 
 最小最终产物（固定）：
 
@@ -130,7 +130,7 @@ python3 build_minimal.py
 
 脚本会：
 
-1. 读取 OpenPano 下游基线 AP/CP（默认 `$BUILD/build-openpano`；`A7R5_BASELINE` 可指向其他已验证副本）；
+1. 读取 OpenPano 下游基线 AP/CP（默认 `$BUILD/build-openpano`；`OPENPANO_BASELINE` 可指向其他已验证副本）；
 2. 断言 AP `1a0480...`、CP `33b63...`；
 3. 直接复制为 `ap-build/appFw-minimal.NONINSTALLABLE.so` 和 `ap-build/cpapp-minimal.NONINSTALLABLE.bin`。
 
@@ -181,7 +181,7 @@ inspect('BODYDATA.DAT', Path('public.pem'), full=True)
 
 | 现象 | 原因 | 处理 |
 |---|---|---|
-| 找不到 `build-openpano` | 下游构建工作区没有 OpenPano 基线 | 让用户提供 OpenPano AP/CP，或用 `A7R5_BASELINE` 指向 |
+| 找不到 `build-openpano` | 下游构建工作区没有 OpenPano 基线 | 让用户提供 OpenPano AP/CP，或用 `OPENPANO_BASELINE` 指向 |
 | 找不到 A/B 源码或工具 | [上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[上游 B](https://github.com/Liwenru88/a7r5-rea) 未准备 | 按 [A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[B](https://github.com/Liwenru88/a7r5-rea) README 准备；缺什么问用户 |
 | AP/CP 哈希不对 | 基线不是预期 | 用本文件哈希对照 |
 | 签名/整包失败 | 私钥/原厂输入/打包环境不对 | 回 A/B 的签名旁路；不要自己生成密钥 |

@@ -13,7 +13,7 @@ import hashlib, json, os
 
 H = Path(__file__).resolve().parent
 P = H.parent
-raw_baseline = os.environ.get("A7R5_BASELINE")
+raw_baseline = os.environ.get("OPENPANO_BASELINE") or os.environ.get("A7R5_BASELINE")  # second name is a legacy alias
 if raw_baseline:
     q = Path(raw_baseline)
     BASELINE = q if q.is_absolute() else (P / q)
@@ -36,7 +36,7 @@ def main():
         raise SystemExit(
             "a7r5-openpano is not self-contained: the OpenPano baseline is an external input, "
             "not part of this GitHub folder. Supply the baseline directory via "
-            "A7R5_BASELINE (or place it under the downstream workspace as build-openpano). "
+            "OPENPANO_BASELINE (or place it under the downstream workspace as build-openpano). "
             "Missing appFw.so or cpapp-b.bin: stop and ask the user."
         )
     ap = BASE_AP.read_bytes()

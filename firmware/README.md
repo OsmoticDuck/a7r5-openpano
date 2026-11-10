@@ -23,7 +23,7 @@ python3 build_minimal.py
 - AP：`build-openpano/patched/appFw.so`，SHA256 `1a048077...`
 - CP：`build-openpano/patched/cpapp-b.bin`，SHA256 `33b63f6b...`
 
-默认路径在下游构建工作区；也可以用 `A7R5_BASELINE` 指向其他同哈希副本。OpenPano 是本项目在 A 的固件源基础上、借助 B 的工具构建的下游基线，**不是 A 的发布**。
+默认路径在下游构建工作区；也可以用 `OPENPANO_BASELINE` 指向其他同哈希副本。OpenPano 是本项目在 A 的固件源基础上、借助 B 的工具构建的下游基线，**不是 A 的发布**。
 
 输出：
 
