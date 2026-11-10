@@ -17,6 +17,7 @@
   - 5.01 下游 AP/CP（`1a0480...` / `33b63...`）；
   - `package501.py`、`partition501.json`、`resources/`、原厂输入、升级器、签名材料。
 - 最终 AP/CP 与 5.01 下游基线**逐字节相同**；本项目不修 RAW 放大弹窗，不要声称修好。
+- **A 只用于胶片/滤镜/声音；自定义画幅逻辑不依赖 A**。但当前 5.01 的 AP/CP 是建立在 A 系/Erlla 4.45 胶片基线上的下游二进制；如果用户要求“只从原版固件、不要胶片预设”，不要拿 5.01 冒充，也不要直接删 A 的资源；必须说明需要把 aspect 补丁重新移植到原始 4.00 AP/CP，并重新做图标、AF、RAW 预览和打包验证。这个纯原版 port 当前不存在。
 - 只刷最终单个 `BODYDATA.DAT`；不要刷中间 AP/CP。
 - 本仓库**不是 self-contained**：GitHub 文件夹只有 README/AI/CHANGES/assets 和 `firmware/final` 构建脚本；5.01 AP/CP、`package501.py`、`partition501.json`、`resources/`、原厂输入、公私钥、可刷 DAT 都不在本仓库。用户只给本文件夹时，列出缺失并停止，不能引用外部 ready DAT 冒充本仓库产物。
 

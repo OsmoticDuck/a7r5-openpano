@@ -31,6 +31,7 @@ B **不是固件基线**，不提供 5.01 AP/CP。
 - 本仓库不包含它；可用 `A7R5_BASELINE` 指向其他同哈希副本；
 - 已包含扩展画幅、自制图标、AF、RAW 预览比例修正和重启/显示修复；
 - 唯一未解决：自定义画幅 RAW 回放放大仍提示“无法放大”。
+- A 的胶片/滤镜/声音功能不是 aspect 的逻辑依赖；当前 5.01 只是以 A 系/Erlla 的 4.45 胶片基线为宿主。只想要 aspect、不要胶片预设时，理论上可从原始 R5 4.00 重新移植 aspect 补丁；但这是新的 port，当前仓库没有该纯原版构建，也没有验证过。
 
 关键哈希见 [../AI_BUILD.md](../AI_BUILD.md) 和 [../firmware/MANIFEST.json](../firmware/MANIFEST.json)。
 
