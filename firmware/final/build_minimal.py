@@ -1,7 +1,7 @@
 """Minimal active extended-aspect build.
 
 Uses the last functional baseline after the RAW preview aspect/geometry fix
-(the 5.01 raw-preview-magnify base supplied by sony-a7r5-custom-firmware).
+(the 5.01 raw-preview-magnify downstream base; not an upstream A/B release).
 That baseline already contains the custom 2:1/65:24 icons, AF fixes, RAW
 preview ratio correction and the required restart/display fixes.
 
@@ -36,7 +36,8 @@ def main():
         raise SystemExit(
             "a7r5-openpano is not self-contained: the 5.01 AP/CP baseline is an external input, "
             "not part of this GitHub folder. The current verified copy lives under the "
-            "sony-a7r5-custom-firmware build-5.01-magnify-20261110/patched directory, "
+            "downstream build workspace (local folder named sony-a7r5-custom-firmware) "
+            "build-5.01-magnify-20261110/patched directory, "
             "but you can supply any verified copy via A7R5_BASELINE. Missing appFw.so "
             "or cpapp-b.bin: stop and ask the user."
         )

@@ -8,20 +8,26 @@
 
 本仓库不是可直接刷入的固件，也不包含 Sony 固件、私钥、升级器或任何 `BODYDATA.DAT`。
 
-**本仓库不是 self-contained**：GitHub 文件夹只有文档、图标和 `firmware/final` 构建脚本，**不包含** 5.01 AP/CP、`package501.py`、`partition501.json`、`resources/`、原厂输入、升级器、公私钥或可刷 `BODYDATA.DAT`。5.01 基线是外部构建产物，当前验证副本在项目 A；也可以由用户从其他已验证副本提供（`A7R5_BASELINE`）。如果用户只有这个文件夹，AI 会先列出缺失项，无法单独生成固件。
+**本仓库不是 self-contained**：GitHub 文件夹只有文档、图标和 `firmware/final` 构建脚本，**不包含** 5.01 AP/CP、`package501.py`、`partition501.json`、`resources/`、原厂输入、升级器、公私钥或可刷 `BODYDATA.DAT`。5.01 是本项目的**下游构建产物**，不是上游 A 的发布；当前验证副本在下游构建工作区，也可以由用户从其他已验证副本提供（`A7R5_BASELINE`）。如果用户只有这个文件夹，AI 会先列出缺失项，无法单独生成固件。
 
 > **风险提示**：自定义固件需要先绕过 Sony 签名校验；刷写错误可能导致相机无法开机，请让 AI 严格按照本仓库或相关基础项目的说明操作。本项目不提供签名密钥、不提供固件，也不对设备损坏负责。
+
+## 上游项目链接
+
+- **A — [Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)**：Sony A7R V 的胶片/滤镜、声音自定义固件源（当前 4.55）；A 本身不含扩展画幅和 5.01。
+- **B — [Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)**：A7R5 Studio、DAT 工具、更新信任、libjit、ColorLab 等研究/验证工具；B 不是固件基线。
 
 ## 使用前必须完成的事项
 
 本仓库**不能单独使用**。请先准备并跑通：
 
-1. **sony-a7r5-custom-firmware**：原厂固件提取、打包、签名和最后功能基线；
-2. **a7r5-rea**：DAT 校验工具和相机侧工具。
+1. **[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)**（上游 A）：Sony A7R V 的胶片/滤镜、声音等自定义固件源与构建（当前 4.55）。A 本身不含扩展画幅、5.01、自制图标、AF 修正或 RAW 预览修正。
+2. **[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)**（上游 B）：A7R5 Studio、a7r5-dat-tool、更新信任、libjit、ColorLab 等 DAT/验证/相机工具。B 不是固件基线。
+3. **5.01 下游基线/打包材料**：由本项目在 A 的固件源基础上、借助 B 的工具构建；当前副本在本地**下游构建工作区**（文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。可以用 `A7R5_BASELINE` 指向其他已验证的同哈希副本。5.01 不在本 GitHub 文件夹，也不是 A 的发布。
 
 具体工具链、命令和哈希见 [AI_BUILD.md](AI_BUILD.md)。
 
-这两个项目负责**破解/绕过签名**、提供原厂固件输入、升级器、公私钥和打包环境。本仓库只提供最小功能补丁、图标和说明。
+上游 A 提供胶片/滤镜、声音等固件源；上游 B 提供 DAT、更新信任、Studio 等工具。签名旁路、原厂输入、升级器和签名材料按 A/B 的说明准备；本仓库不提供。
 
 **建议让 AI 按 [AI_BUILD.md](AI_BUILD.md) 操作**；README 不重复构建/哈希细节。
 
@@ -33,9 +39,10 @@
 
 AI 需要本机有：
 
-- `sony-a7r5-custom-firmware`（项目 A）；
-- `a7r5-rea`（项目 B）；
-- 5.01 基线（当前验证副本在项目 A，也可由其他已验证副本提供）、原厂输入、升级器和签名材料。
+- [Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)（上游 A，胶片/声音固件源）；
+- [Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)（上游 B，DAT/Studio/信任工具）；
+- 5.01 下游基线（当前验证副本在下游构建工作区，也可由其他已验证副本提供）、原厂输入、升级器和签名材料。
+- 上游 A/B 的源码或工具环境（A 提供胶片/声音固件源，B 提供 DAT/信任/Studio 工具）。
 
 缺任何一项，让 AI 先列出来问你，不要自己造基线或密钥。
 

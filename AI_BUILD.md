@@ -1,63 +1,90 @@
 # AI_BUILD.md — 给 AI 的最小扩展画幅编译/打包清单
 
-目标：在 **sony-a7r5-custom-firmware** 与 **a7r5-rea** 两个基础项目已经能完成签名旁路/打包的前提下，构建**最小活动版本**的扩展画幅固件。
+目标：在**上游项目 A、B**和**本项目的 5.01 下游基线**都就绪的前提下，构建最小活动版本的扩展画幅固件。
 
 > 本仓库只保留实现扩展画幅的最小功能，不展开中间调试版本。先读 [README.md](README.md)。
 
 ## 0.1 用户把项目交给你时，先做这些
 
 - 你是操作者；用户不需要懂代码。
-- 5.01 基线是**外部构建产物**，不是项目 A 的固有属性，也不在本 GitHub 文件夹里；当前验证副本在项目 A 的 `build-5.01-magnify-20261110/patched/`。如果用户从别处拿到同一哈希的 5.01 AP/CP，可以用 `A7R5_BASELINE` 指向它（绝对路径，或相对于项目 A 的路径）。先检查 `appFw.so`/`cpapp-b.bin` 存在且哈希匹配；没有就请用户提供，不要自己造基线。
-- 确认项目 A 的原厂输入/升级器/公私钥、`raw-zoom-magnify-501-20261110/package501.py`、`partition501.json`、`resources/` 都在；缺什么直接问用户，不要生成密钥或替换成未验证版本。
-- 最终 AP/CP 与 5.01 基线**逐字节相同**；本项目不修 RAW 放大弹窗，不要声称修好。
+- **先分清三个东西**：
+  - 上游 A：[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware) — 胶片/滤镜、声音等自定义固件源，当前 4.55；**A 本身没有扩展画幅、5.01、自制图标、AF 修正或 RAW 预览修正**。
+  - 上游 B：[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea) — A7R5 Studio、a7r5-dat-tool、更新信任、libjit、ColorLab 等 DAT/验证/相机工具；**B 不是固件基线**。
+  - **5.01 下游基线**：本项目在 A 的固件源基础上、借助 B 的工具构建的扩展画幅基线；当前副本在**下游构建工作区**（本机文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。5.01 不在本 GitHub 文件夹，也不是 A 的发布。
+- 5.01 基线是外部输入；如果用户从别处拿到同哈希 AP/CP，可用 `A7R5_BASELINE` 指向（绝对路径，或相对于下游构建工作区的路径）。
+- 缺以下任何一项就停止并问用户，不要自己造基线/密钥：
+  - A/B 的源码或工具环境；
+  - 5.01 下游 AP/CP（`1a0480...` / `33b63...`）；
+  - `package501.py`、`partition501.json`、`resources/`、原厂输入、升级器、签名材料。
+- 最终 AP/CP 与 5.01 下游基线**逐字节相同**；本项目不修 RAW 放大弹窗，不要声称修好。
 - 只刷最终单个 `BODYDATA.DAT`；不要刷中间 AP/CP。
-- **本仓库不是 self-contained**：GitHub 文件夹只有 README/AI/CHANGES/assets 和 `firmware/final` 构建脚本；5.01 AP/CP、`package501.py`、`partition501.json`、`resources/`、原厂输入、公私钥和任何可刷 DAT 都在**外部**项目 A/B，不在本仓库。
-- 如果用户只提供本 GitHub 文件夹：停止，列出缺失，请用户提供项目 A/B 和 5.01 基线/密钥；不能生成/交付可刷 DAT，也不能引用项目 A 的 ready DAT 冒充本仓库产物。
+- 本仓库**不是 self-contained**：GitHub 文件夹只有 README/AI/CHANGES/assets 和 `firmware/final` 构建脚本；5.01 AP/CP、`package501.py`、`partition501.json`、`resources/`、原厂输入、公私钥、可刷 DAT 都不在本仓库。用户只给本文件夹时，列出缺失并停止，不能引用外部 ready DAT 冒充本仓库产物。
 
-## 0. 路径
+## 0.2 路径
 
 ```
 $ROOT/
-  sony-a7r5-custom-firmware/          # 基础项目 A（固件/签名/打包）
-  a7r5/a7r5-rea/                      # 基础项目 B（DAT 工具/引擎/独立校验）
-  a7r5/direct-p1-read-20261031/       # 分析依赖
+  upstream/sony-a7r5-custom-firmware/ # 上游 A 的克隆；只提供 A 的胶片/声音固件源
+  a7r5/a7r5-rea/                      # 上游 B 的克隆；DAT/Studio/信任工具
+  build-workspace/                    # 下游构建工作区；本机可能叫 sony-a7r5-custom-firmware
   a7r5-openpano/                      # 本仓库
 ```
 
-- `$CUSTOM` = `$ROOT/sony-a7r5-custom-firmware`
-- `$REA` = `$ROOT/a7r5/a7r5-rea`
+- `$A` = A 的克隆（上游 A）。
+- `$B` = `$ROOT/a7r5/a7r5-rea`（上游 B）。
+- `$BUILD` = 下游构建工作区（当前本机文件夹名可能是 `sony-a7r5-custom-firmware`；包含 `build-5.01-magnify-20261110` 和 `raw-zoom-magnify-501-20261110`）。**它不是 A 的 GitHub 仓库。**
 
-## 1. 基础项目负责什么
+> 名字冲突很容易误导：A 的 GitHub 仓库叫 `sony-a7r5-custom-firmware`，本机下游工作区也可能叫这个名。执行前先确认路径里有没有 `build-5.01-magnify-20261110` 和 `raw-zoom-magnify-501-20261110`；只有它们才是下游基线。
 
-### 1.1 sony-a7r5-custom-firmware（项目 A）
+## 1. 上游 A 负责什么
 
-- 原厂/自定义固件提取、打包、FDAT/RSA 签名、AES 整包；
-- **5.01 raw-preview-magnify 基线**：外部构建产物；当前验证副本在项目 A（`build-5.01-magnify-20261110/patched/`），但 `build_minimal.py` 也支持用 `A7R5_BASELINE` 指向任何同哈希副本；本仓库不包含它；
-- 该基线已经包含扩展画幅、自制菜单/回放图标、AF 修正和重启/显示修复；
-- `feature-extension-436/result/source`、`package.py`/现有 package 脚本；
-- 原厂 DAT、升级器、公私钥、原始输入。
+[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)
 
-### 1.2 a7r5-rea（项目 B）
+- Sony A7R V / R5 的胶片/滤镜、声音等自定义固件源与构建（当前 4.55）；
+- 六槽回读/解放工具、声音包、滤镜 BIN、ColorLab 工作台；
+- 固件源码构建入口；原厂输入、外部签名材料和工具链由使用者按 A 的 README 准备。
 
-- `source/a7r5-dat-tool`：`a7r5dat.tool.inspect`；
-- `A7R5-Studio-0.1.0-mac-arm64-test/.../engine/site`：打包/镜像运行环境；
+A **不包含**：
+
+- 扩展画幅 2:1 / 2.35:1 / XPan 65:24；
+- 5.01 下游基线；
+- 自制 2:1 / 65:24 图标；
+- AF 修正、RAW 预览比例修正、RAW 放大研究。
+
+## 2. 上游 B 负责什么
+
+[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)
+
+- A7R5 Studio 客户端；
+- `source/a7r5-dat-tool`：DAT 工具、独立签名/整包/成员/版本校验；
+- 更新信任环境、按需 SSH、libjit、ColorLab 等研究/打包工具；
 - 相机侧执行/读取环境（本构建不需要连接相机）。
 
-**签名旁路/密钥不在本仓库**。项目 A 的 `private.pem`、`updater.img`、`original.DAT`、`public.pem`、`sony_public.pem` 必须由使用者按项目 A 的说明准备。
+B **不是固件基线**，不提供 5.01 AP/CP；它用于构建/验证/打包。
 
-### 1.3 后端实现摘要（从 README 移入）
+## 3. 5.01 下游基线是什么
+
+5.01 是本项目在 A 的固件源基础上、借助 B 的工具构建出来的扩展画幅基线：
+
+- 不是 A 的发布，也不是 B 的发布；
+- 当前验证副本在下游构建工作区 `$BUILD/build-5.01-magnify-20261110/patched/`；
+- 本仓库不包含它；也可以用 `A7R5_BASELINE` 指向其他同哈希副本；
+- 已包含：扩展画幅、2:1/65:24 自制图标、AF 修正、RAW 预览比例修正、重启/显示修复；
+- 唯一未解决：自定义画幅 RAW 回放放大仍提示“无法放大”。
+
+### 3.1 后端实现摘要
 
 - 扩展画幅模型 **4..6** 保存在原生 `52b`；菜单增加自定义行；
 - CP 增加手动比例记录和消费路径，覆盖取景、对焦放大、拍摄、回放；
 - AP 为普通取景、MF、拍摄、回放分别构建独立几何/上下文；RAW 保留原厂全源；大预览使用独立 1920 宽；
-- 5.01 基线已包含菜单/回放自制图标（2:1、65:24；2.35:1 用原厂图标）；
-- 5.01 基线已包含 RAW 预览比例/裁切修正；
-- 5.01 基线已包含 AF 修正（AF 显示类别读取真实源，而不是固定全传感器类别）；
-- 5.01 基线已包含使用自定义画幅所必需的重启/显示修复：菜单资源、AF 边界/glyph、FC/YUV、CWB、自动布局、显示校准、规则 NOT_SET、源格式、网格/菜单 getter、追踪、AF 窗口、MF/回放共用 PID3019、菜单所有权、回放表交接、CP selector；
-- 5.01 基线的调试钩子已经是原版指令，没有活动 diagnostics；
-- **未解决**：自定义画幅 RAW 回放放大仍提示“无法放大”。此前诊断确认 AP 的 read/availability/descriptor 均成功；caution finder、四个直接 `0x0207a042` 构造点、`0x18992f4` 对话框键都未命中；最后一次 caution 入口钩子导致启动循环，已作废。5.02 起的 RAW zoom 诊断/探针不属于本最小版本；5.x 探针也不包含。
+- 5.01 下游基线包含菜单/回放自制图标（2:1、65:24；2.35:1 用原厂图标）；
+- 包含 RAW 预览比例/裁切修正；
+- 包含 AF 修正（AF 显示类别读取真实源，而不是固定全传感器类别）；
+- 包含必需的重启/显示修复：菜单资源、AF 边界/glyph、FC/YUV、CWB、自动布局、显示校准、规则 NOT_SET、源格式、网格/菜单 getter、追踪、AF 窗口、MF/回放共用 PID3019、菜单所有权、回放表交接、CP selector；
+- 基线的调试钩子已经是原版指令，没有活动 diagnostics；
+- **未解决**：自定义画幅 RAW 回放放大仍提示“无法放大”。此前诊断确认 AP 的 read/availability/descriptor 均成功；caution finder、四个直接 `0x0207a042` 构造点、`0x18992f4` 对话框键都未命中；最后一次 caution 入口钩子导致启动循环，已作废。5.02 起的 RAW zoom 诊断/探针不属于本最小版本。
 
-### 1.4 自制画幅图标
+### 3.2 自制画幅图标
 
 `assets/icons/` 保存自制图标的源文件/备份：
 
@@ -68,16 +95,16 @@ $ROOT/
 | 回放 | 2:1 | 47×32 | `play-2x1.png` + `play-2x1.rgba4444` |
 | 回放 | 65:24 (XPan) | 47×32 | `play-65x24.png` + `play-65x24.rgba4444` |
 
-- 这些图标已经安装在 5.01 基线的菜单/回放资源中；`assets/icons/` 是源文件，不是独立可刷固件；
+- 这些图标已经安装在 5.01 下游基线的菜单/回放资源中；`assets/icons/` 是源文件，不是独立可刷固件；
 - 2.35:1 沿用原厂图标；
 - 图标哈希见 `assets/icons/artwork-manifest.json` 和 `assets/icons/README.md`。
 
-## 2. 输入
+## 4. 输入
 
-| 输入 | 路径（相对 `$CUSTOM`） | SHA256 |
+| 输入 | 路径（相对 `$BUILD`） | SHA256 |
 |---|---|---|
-| 5.01 基线 AP（默认路径；可用 `A7R5_BASELINE` 覆盖） | `build-5.01-magnify-20261110/patched/appFw.so` | `1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751` |
-| 5.01 基线 CP（默认路径；可用 `A7R5_BASELINE` 覆盖） | `build-5.01-magnify-20261110/patched/cpapp-b.bin` | `33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10` |
+| 5.01 下游 AP（默认路径；可用 `A7R5_BASELINE` 覆盖） | `build-5.01-magnify-20261110/patched/appFw.so` | `1a048077a42c538483ec9bb7f354bf7edbb1be95919cce5df299c56c4a9b0751` |
+| 5.01 下游 CP（默认路径；可用 `A7R5_BASELINE` 覆盖） | `build-5.01-magnify-20261110/patched/cpapp-b.bin` | `33b63f6bc300f481e1a04126e81b9b3d9e0c2db2eb178164362adb52522d8b10` |
 
 最小最终产物（固定）：
 
@@ -88,12 +115,12 @@ $ROOT/
 
 **不提供固定 DAT 哈希**：DAT 版本字段是容器编号，换编号后整包哈希会变。
 
-## 3. 构建最小 AP/CP
+## 5. 构建最小 AP/CP
 
-把 `firmware/final` 复制为 `$CUSTOM` 的直接子目录：
+把 `firmware/final` 复制为 `$BUILD` 的直接子目录：
 
 ```bash
-cd "$CUSTOM"
+cd "$BUILD"
 rm -rf ext-aspect-minimal
 cp -R "$ROOT/a7r5-openpano/firmware/final" ext-aspect-minimal
 cd ext-aspect-minimal
@@ -102,32 +129,29 @@ python3 build_minimal.py
 
 脚本会：
 
-1. 读取 5.01 基线 AP/CP（默认项目 A 路径；`A7R5_BASELINE` 可指向其他已验证副本）；
+1. 读取 5.01 下游基线 AP/CP（默认 `$BUILD/build-5.01-magnify-20261110`；`A7R5_BASELINE` 可指向其他已验证副本）；
 2. 断言 AP `1a0480...`、CP `33b63...`；
 3. 直接复制为 `ap-build/appFw-minimal.NONINSTALLABLE.so` 和 `ap-build/cpapp-minimal.NONINSTALLABLE.bin`。
 
-5.01 基线已经包含扩展画幅、图标、RAW 预览比例修正、AF 和重启修复；不在这里打额外补丁，也不添加调试钩子。
+5.01 下游基线已经包含扩展画幅、图标、RAW 预览比例修正、AF 和重启修复；不在这里打额外补丁，也不添加调试钩子。
 
-## 4. 打包/签名/容器编号
+## 6. 打包/签名/容器编号
 
-使用项目 A 的 5.01 package 入口：
+使用**下游构建工作区**的 5.01 package 入口（不是 A 的 GitHub 仓库）：
 
 ```bash
-cd "$CUSTOM/raw-zoom-magnify-501-20261110"
-# package501.py 已使用与最小最终 AP/CP 相同的 5.01 AP/CP 和 partition501/resources
+cd "$BUILD/raw-zoom-magnify-501-20261110"
 python3 package501.py
 ```
 
 说明：
 
-- 最小最终 AP/CP 与 5.01 基线逐字节相同，所以 `package501.py` 可以直接使用；不需要改 AP/CP；
-- `package501.py` 的默认版本是 5.01，输出目录 `build-5.01-magnify-20261110` 可能已存在；如果已存在，不要覆盖，按 `prepare_version501.py` 的方式使用新的容器编号/输出目录（只改版本字段，不改 AP/CP/分区），或停下问用户；不要用外部 ready DAT 冒充本仓库打包结果；
+- 最小最终 AP/CP 与 5.01 下游基线逐字节相同，所以 `package501.py` 可以直接使用；不需要改 AP/CP；
+- `package501.py` 的默认版本是 5.01，输出目录 `build-5.01-magnify-20261110` 可能已存在；如果已存在，不要覆盖，按 `prepare_version501.py` 的方式使用新的容器编号/输出目录（只改版本字段，不改 AP/CP/分区），或停下问用户；不要用外部 ready DAT 冒充打包结果；
 - 打包后必须独立验证；
 - 不要直接把 PNG 图标或 AP/CP 塞进 DAT。
 
-本仓库不包含现成 DAT；必须按上面的流程打包并独立验证。如果用户只有本文件夹，先列出缺失的基础项目/5.01 基线/密钥，不要交付未经本流程生成的 DAT。
-
-### 4.1 版本号只是容器编号
+### 6.1 版本号只是容器编号
 
 本仓库不分配自己的版本号。打包时把固件版本字段设为**任意一个比机内当前版本更新的编号**即可：
 
@@ -136,35 +160,37 @@ python3 package501.py
 
 版本字段只影响 DAT 的容器编号和整包哈希；AP/CP 功能内容不变。打包后记录实际生成的 DAT 哈希。
 
-### 4.2 必须验证
+### 6.2 必须验证
 
 ```python
 from a7r5dat.tool import inspect
 inspect('BODYDATA.DAT', Path('public.pem'), full=True)
 ```
 
-确认 `signature_verified`、`full_frame_validation`、你选择的容器编号、实际 DAT SHA256；相对原版基线只改变 AP/CP/sum 三个成员（以项目 A 的基线比较为准）。
+确认 `signature_verified`、`full_frame_validation`、你选择的容器编号、实际 DAT SHA256；相对原版基线只改变 AP/CP/sum 三个成员（以原版/上游基线比较为准）。
 
-## 5. 刷写
+## 7. 刷写
 
-- 先完成两个基础项目的**签名旁路/刷写环境**；本仓库不提供绕过方法。
+- 先完成上游 A/B 的**签名旁路/刷写环境**；本仓库不提供绕过方法。
 - 只刷最终生成的单个 `BODYDATA.DAT`。
 - 测试：三个自定义比例分别关机开机；摇杆 AF；对焦放大进出；拍照/回放；切回原厂。
-- 出问题先恢复原厂/5.01 基线，不要连续刷多个自定义包。
+- 出问题先恢复原厂/5.01 下游基线，不要连续刷多个自定义包。
 
-## 6. 常见失败
+## 8. 常见失败
 
 | 现象 | 原因 | 处理 |
 |---|---|---|
-| 找不到 `build-5.01...` | 项目 A 没有 5.01 基线 | 先恢复项目 A 的 5.01 raw-preview-magnify 构建 |
+| 找不到 `build-5.01...` | 下游构建工作区没有 5.01 | 让用户提供下游 5.01 AP/CP，或用 `A7R5_BASELINE` |
+| 找不到 A/B 源码或工具 | 上游 A/B 未准备 | 按 A/B README 准备；缺什么问用户 |
 | AP/CP 哈希不对 | 基线不是预期 | 用本文件哈希对照 |
-| 签名/整包失败 | 私钥/原厂输入/打包环境不对 | 回项目 A/B 的签名旁路；不要自己生成密钥 |
+| 签名/整包失败 | 私钥/原厂输入/打包环境不对 | 回 A/B 的签名旁路；不要自己生成密钥 |
 | 版本号被拒 | 容器编号不高于机内 | 换成任意更大的编号 |
 
-## 7. 交付前检查
+## 9. 交付前检查
 
-- [ ] 5.01 基线 AP/CP 哈希匹配；
-- [ ] 最小最终 AP/CP 哈希匹配（`1a0480...` / `33b63...`）；
+- [ ] 上游 A/B 的来源和角色已向用户说明：A 是胶片/声音固件源，B 是工具，5.01 是下游基线；
+- [ ] 5.01 下游 AP/CP 哈希匹配（`1a0480...` / `33b63...`）；
+- [ ] 最小最终 AP/CP 哈希匹配；
 - [ ] 容器编号是任意更高编号，且已记录；
 - [ ] `a7r5dat.tool.inspect(full=True)` 通过；
 - [ ] 不包含 RAW zoom 探针、私钥、Sony 原厂固件；
