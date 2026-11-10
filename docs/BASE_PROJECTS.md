@@ -4,12 +4,11 @@
 
 1. 上游 A：[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)
 2. 上游 B：[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)
-3. 4.36 原始胶片源：[Erlla/sony-a7m4-custom-firmware](https://github.com/Erlla/sony-a7m4-custom-firmware)
-4. 本项目的 **5.01 下游基线**
+3. 本项目的 **5.01 下游基线**
 
 ## 1. 上游 A — sony-a7r5-custom-firmware
 
-- Sony A7R V / R5 的胶片/滤镜、声音等自定义固件源与构建（当前 4.55）；
+- Sony A7R V / R5 的胶片/滤镜、声音等自定义固件源与构建；
 - 六槽回读/解放工具、声音包、滤镜 BIN、ColorLab 工作台；
 - 固件源码构建入口；原厂输入、外部签名材料和工具链由使用者按 A 的 README 准备。
 
@@ -26,13 +25,12 @@ B **不是固件基线**，不提供 5.01 AP/CP。
 
 ## 3. 5.01 下游基线
 
-- 本项目在 A 的固件源基础上、借助 B 的工具构建；
+- 本项目在 A 的上游胶片/滤镜源 + B 的工具基础上构建；
 - 不是 A 的发布，也不是 B 的发布；
-- 当前验证副本在下游构建工作区（本机文件夹名可能是 `sony-a7r5-custom-firmware`，但**不是 A 的 GitHub 仓库**）；其 4.45 是本地打包容器，源码是 **Erlla 4.36（frozen436）**，不是 Erlla/A 的上游 4.45；A 4.55 是后续 R5 项目，保留 4.36 滤镜并增加声音，5.01 不包含 A 4.55 的声音部分；
+- 当前验证副本在下游构建工作区（本机文件夹名可能是 `sony-a7r5-custom-firmware`，但**不是 A 的 GitHub 仓库**）；
 - 本仓库不包含它；可用 `A7R5_BASELINE` 指向其他同哈希副本；
 - 已包含扩展画幅、自制图标、AF、RAW 预览比例修正和重启/显示修复；
 - 唯一未解决：自定义画幅 RAW 回放放大仍提示“无法放大”。
-- A 的胶片/滤镜/声音功能不是 aspect 的逻辑依赖；当前 5.01 只是以 Erlla 4.36 的胶片源（本地 4.45 容器）为宿主。只想要 aspect、不要胶片预设时，理论上可从原始 R5 4.00 重新移植 aspect 补丁；但这是新的 port，当前仓库没有该纯原版构建，也没有验证过。
 
 关键哈希见 [../AI_BUILD.md](../AI_BUILD.md) 和 [../firmware/MANIFEST.json](../firmware/MANIFEST.json)。
 
