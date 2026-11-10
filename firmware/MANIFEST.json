@@ -2,27 +2,27 @@
   "name": "a7r5-openpano",
   "container_version": "not fixed; choose any value newer than the installed firmware at packaging time",
   "base": {
-    "AP_sha256": "9f947f68bec0d6a5140a5d31078ed5cdda920c7b25c656fb619d953eb4833e7a",
-    "CP_sha256": "1bcdddcff45ac551d36f0992955e2ffb0c1c54c3d12d3f0c37d0cfb306146f84"
+    "build": "build-4.92-quality-menu-20261105",
+    "AP_sha256": "d17861657b062d4228ea74b31844bf7476cd82e3530c36b9b201f930c3df432f",
+    "CP_sha256": "feececdcfdfff740324327eadedc863fc293e136b9b1db91cc8bc4e222f550c4"
   },
   "final": {
-    "AP_sha256": "30f556e7c106b5aabb0b06127c08cbdc81229a02f440f1bf6b771038410beb6c",
-    "CP_sha256": "1bcdddcff45ac551d36f0992955e2ffb0c1c54c3d12d3f0c37d0cfb306146f84"
+    "AP_sha256": "d17861657b062d4228ea74b31844bf7476cd82e3530c36b9b201f930c3df432f",
+    "CP_sha256": "feececdcfdfff740324327eadedc863fc293e136b9b1db91cc8bc4e222f550c4"
   },
   "source_sha256": {
-    "firmware/final/build_minimal.py": "07b52fba19269cca10ed6efa01db4fe8c21ff1eb72f88a0dcd626261d7d7a0c5"
+    "firmware/final/build_minimal.py": "7e2c9fa0172a45606ef1b9cf47e4337cfc26a6c4573f63cf6ae498438f304a02"
   },
-  "debug_hooks_disabled": [
-    "bounded fatal-signal recorder: assert/fatal/request/set/sequence",
-    "AF RAM observer"
-  ],
-  "dead_diagnostic_code_retained": true,
+  "base_is_final": true,
+  "icons_installed": true,
   "af_frame_fix_included": true,
+  "debug_hooks_already_absent": true,
+  "dead_diagnostic_code_retained": true,
   "raw_zoom_fix_included": false,
   "notes": [
-    "Only the minimal active extended-aspect build is included.",
-    "AF display source fix (4B) is included; RAW playback zoom is still unresolved.",
+    "The 4.92 quality-menu base already contains the custom 2:1/65:24 menu and playback icons.",
+    "AF display source fix is included in the base; RAW playback zoom is still unresolved.",
     "No DAT hash is fixed: the version field is a container number.",
-    "The last functional base is supplied by sony-a7r5-custom-firmware; this repo does not vendor Sony firmware or keys."
+    "The base is supplied by sony-a7r5-custom-firmware; this repo does not vendor Sony firmware or keys."
   ]
 }

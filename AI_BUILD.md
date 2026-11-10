@@ -2,7 +2,7 @@
 
 目标：在 **sony-a7r5-custom-firmware** 与 **a7r5-rea** 两个基础项目已经能完成签名旁路/打包的前提下，构建**最小活动版本**的扩展画幅固件。
 
-> 本仓库只保留实现扩展画幅所需的最小功能，不展开中间调试版本。先读 [README.md](README.md)。
+> 本仓库只保留实现扩展画幅的最小功能，不展开中间调试版本。先读 [README.md](README.md)。
 
 ## 0. 路径
 
@@ -11,7 +11,7 @@ $ROOT/
   sony-a7r5-custom-firmware/          # 基础项目 A（固件/签名/打包）
   a7r5/a7r5-rea/                      # 基础项目 B（DAT 工具/引擎/独立校验）
   a7r5/direct-p1-read-20261031/       # 分析依赖
-  a7r5-openpano/               # 本仓库
+  a7r5-openpano/                      # 本仓库
 ```
 
 - `$CUSTOM` = `$ROOT/sony-a7r5-custom-firmware`
@@ -22,7 +22,8 @@ $ROOT/
 ### 1.1 sony-a7r5-custom-firmware（项目 A）
 
 - 原厂/自定义固件提取、打包、FDAT/RSA 签名、AES 整包；
-- 项目 A 的**最后功能基线**（本仓库的 `build_minimal.py` 读取它的 `patched/appFw.so` 和 `patched/cpapp-b.bin`）；
+- 项目 A 的 **4.92 quality-menu 基线**（本仓库 `build_minimal.py` 读取它的 `patched/appFw.so` / `patched/cpapp-b.bin`）；
+- 该基线已经包含扩展画幅、自制菜单/回放图标、AF 修正和重启/显示修复；
 - `feature-extension-436/result/source`、`package.py`/现有 package 脚本；
 - 原厂 DAT、升级器、公私钥、原始输入。
 
@@ -36,21 +37,18 @@ $ROOT/
 
 ### 1.3 后端实现摘要（从 README 移入）
 
-README 只讲用户看到的功能；构建/后端细节在下面。
-
-- 扩展画幅模型 **4..6** 保存在原生 `52b`；菜单增加 1680..1682 自定义行；
-- CP 增加独立手动比例记录和消费路径，覆盖取景、对焦放大、拍摄、回放；
+- 扩展画幅模型 **4..6** 保存在原生 `52b`；菜单增加自定义行；
+- CP 增加手动比例记录和消费路径，覆盖取景、对焦放大、拍摄、回放；
 - AP 为普通取景、MF、拍摄、回放分别构建独立几何/上下文；RAW 保留原厂全源；大预览使用独立 1920 宽；
-- 共享源查询恢复原语义，照片输出使用独立 7..9 源；
-- 已合并的重启/显示修复：菜单资源、AF 边界/glyph、FC/YUV、CWB、自动布局、显示校准、规则 NOT_SET、图标、源格式、网格/菜单 getter、追踪、AF 窗口、MF/回放共用 PID3019、菜单所有权、回放表交接、CP selector；
-- 最小构建关闭 5 个有界异常记录器钩子和 AF RAM 观察器钩子（不是扩展画幅的必要条件）；
-- 死代码仍在基础镜像中，但没有活动调用；完整删除需要重新链接，本仓库未提供；
-- 最终 AP/CP 哈希见第 2 节；AF 框的 4B 源类别修正**已包含**（读取真实源类别，而不是固定全传感器类别）。
-- **未解决**：自定义画幅 RAW 回放放大仍会提示“无法放大”。此前诊断确认 AP 的 read/availability/descriptor 均成功；caution finder、四个直接 `0x0207a042` 构造点、`0x18992f4` 对话框键都未命中；最后一次 caution 入口钩子导致启动循环，已作废。该问题不在本最小版本内修复。
+- 4.92 基线已包含菜单/回放自制图标（2:1、65:24；2.35:1 用原厂图标）；
+- 4.92 基线已包含 AF 修正（AF 显示类别读取真实源，而不是固定全传感器类别）；
+- 4.92 基线已包含使用自定义画幅所必需的重启/显示修复：菜单资源、AF 边界/glyph、FC/YUV、CWB、自动布局、显示校准、规则 NOT_SET、源格式、网格/菜单 getter、追踪、AF 窗口、MF/回放共用 PID3019、菜单所有权、回放表交接、CP selector；
+- 4.92 基线的调试钩子已经是原版指令，没有活动 diagnostics；
+- **未解决**：自定义画幅 RAW 回放放大仍提示“无法放大”。此前诊断确认 AP 的 read/availability/descriptor 均成功；caution finder、四个直接 `0x0207a042` 构造点、`0x18992f4` 对话框键都未命中；最后一次 caution 入口钩子导致启动循环，已作废。4.93–4.99 的 RAW zoom 尝试不属于本最小版本；5.x 探针也不包含。
 
 ### 1.4 自制画幅图标
 
-`assets/icons/` 包含自制的菜单/回放图标：
+`assets/icons/` 保存自制图标的源文件/备份：
 
 | 用途 | 画幅 | 尺寸 | 文件 |
 |---|---|---|---|
@@ -59,25 +57,23 @@ README 只讲用户看到的功能；构建/后端细节在下面。
 | 回放 | 2:1 | 47×32 | `play-2x1.png` + `play-2x1.rgba4444` |
 | 回放 | 65:24 (XPan) | 47×32 | `play-65x24.png` + `play-65x24.rgba4444` |
 
-- 2.35:1 沿用原厂图标，不在 assets 里重复；
-- 图标保留原版圆角底框/透明轮廓，数字字形来自原版 UI 字形的逐像素裁片/收窄；
-- **当前最小固件没有安装这些图标**：菜单仍使用原厂资源占位；这些是设计资产，不是可刷固件，也不是现成 UXC 记录；
-- 安装到 UXC 需要额外的资源记录/ID/容器工作，超出本最小版本；AI 不应把 PNG 直接塞进 DAT；
+- 这些图标已经安装在 4.92 基线的菜单/回放资源中；`assets/icons/` 是源文件，不是独立可刷固件；
+- 2.35:1 沿用原厂图标；
 - 图标哈希见 `assets/icons/artwork-manifest.json` 和 `assets/icons/README.md`。
 
 ## 2. 输入
 
 | 输入 | 路径（相对 `$CUSTOM`） | SHA256 |
 |---|---|---|
-| 最后功能基线 AP | `build-4.85-liveview-20261104/patched/appFw.so` | `9f947f68bec0d6a5140a5d31078ed5cdda920c7b25c656fb619d953eb4833e7a` |
-| 最后功能基线 CP | `build-4.85-liveview-20261104/patched/cpapp-b.bin` | `1bcdddcff45ac551d36f0992955e2ffb0c1c54c3d12d3f0c37d0cfb306146f84` |
+| 4.92 基线 AP | `build-4.92-quality-menu-20261105/patched/appFw.so` | `d17861657b062d4228ea74b31844bf7476cd82e3530c36b9b201f930c3df432f` |
+| 4.92 基线 CP | `build-4.92-quality-menu-20261105/patched/cpapp-b.bin` | `feececdcfdfff740324327eadedc863fc293e136b9b1db91cc8bc4e222f550c4` |
 
 最小最终产物（固定）：
 
 | 产物 | SHA256 |
 |---|---|
-| 最小最终 AP | `30f556e7c106b5aabb0b06127c08cbdc81229a02f440f1bf6b771038410beb6c` |
-| 最小最终 CP | `1bcdddcff45ac551d36f0992955e2ffb0c1c54c3d12d3f0c37d0cfb306146f84` |
+| 最小最终 AP | `d17861657b062d4228ea74b31844bf7476cd82e3530c36b9b201f930c3df432f` |
+| 最小最终 CP | `feececdcfdfff740324327eadedc863fc293e136b9b1db91cc8bc4e222f550c4` |
 
 **不提供固定 DAT 哈希**：DAT 版本字段是容器编号，换编号后整包哈希会变。
 
@@ -95,16 +91,15 @@ python3 build_minimal.py
 
 脚本会：
 
-1. 读取项目 A 的最后功能基线 AP/CP；
-2. 恢复并关闭 5 个有界异常记录器钩子 + 1 个 AF RAM 观察器钩子（这些不是扩展画幅所必需）；
-3. 在 `0x16d82f0` 应用 AF 显示类别的 4B 修正（`01008052` → `815a40b9`）；
-4. 输出 `ap-build/appFw-minimal.NONINSTALLABLE.so`（`30f556...`）和 `ap-build/cpapp-minimal.NONINSTALLABLE.bin`（`1bcddd...`）。
+1. 读取项目 A 的 4.92 基线 AP/CP；
+2. 断言 AP `d178...`、CP `feecec...`；
+3. 直接复制为 `ap-build/appFw-minimal.NONINSTALLABLE.so` 和 `ap-build/cpapp-minimal.NONINSTALLABLE.bin`。
 
-调试钩子关闭后，基础镜像里的死代码仍在，但没有活动调用；完整删除死代码需要重新链接，本仓库未提供。
+4.92 基线已经包含扩展画幅、图标、AF 和重启修复；不在这里打额外补丁，也不添加调试钩子。
 
 ## 4. 打包/签名/容器编号
 
-使用项目 A 现有的 package 流程（以项目 A 最后功能版本的 `package` 脚本为模板），把 AP/CP 输入替换为：
+使用项目 A 现有的 package 流程（以 4.92 quality-menu 的 package 脚本为模板），把 AP/CP 输入替换为：
 
 ```
 ap-build/appFw-minimal.NONINSTALLABLE.so
@@ -135,24 +130,23 @@ inspect('BODYDATA.DAT', Path('public.pem'), full=True)
 
 - 先完成两个基础项目的**签名旁路/刷写环境**；本仓库不提供绕过方法。
 - 只刷最终生成的单个 `BODYDATA.DAT`。
-- 测试：三个自定义比例分别关机开机；进入/退出 MF；拍照/回放；切回原厂。
-- 出问题先恢复原厂/最后功能基线，不要连续刷多个自定义包。
+- 测试：三个自定义比例分别关机开机；摇杆 AF；对焦放大进出；拍照/回放；切回原厂。
+- 出问题先恢复原厂/4.92 基线，不要连续刷多个自定义包。
 
 ## 6. 常见失败
 
 | 现象 | 原因 | 处理 |
 |---|---|---|
-| 找不到 `build-4.85...` | 项目 A 没有最后功能基线 | 先恢复项目 A 的最后功能基线 |
-| 基线 AP/CP 哈希不对 | 基线不是预期 | 用本文件哈希对照 |
-| 最终 AP 哈希不对 | 钩子恢复位置/当前值不对 | 确认 6 个站点的当前/原始值 |
+| 找不到 `build-4.92...` | 项目 A 没有 4.92 基线 | 先恢复项目 A 的 4.92 quality-menu 构建 |
+| AP/CP 哈希不对 | 基线不是预期 | 用本文件哈希对照 |
 | 签名/整包失败 | 私钥/原厂输入/打包环境不对 | 回项目 A/B 的签名旁路；不要自己生成密钥 |
 | 版本号被拒 | 容器编号不高于机内 | 换成任意更大的编号 |
 
 ## 7. 交付前检查
 
-- [ ] 基线 AP/CP 哈希匹配；
-- [ ] 最小最终 AP/CP 哈希匹配（`30f556...` / `1bcddd...`）；
+- [ ] 4.92 基线 AP/CP 哈希匹配；
+- [ ] 最小最终 AP/CP 哈希匹配（`d178...` / `feecec...`）；
 - [ ] 容器编号是任意更高编号，且已记录；
 - [ ] `a7r5dat.tool.inspect(full=True)` 通过；
-- [ ] 不包含 RAW 放大/弹窗探针、私钥、Sony 原厂固件；
-- [ ] 明确告知用户：AF 框修正已包含；自定义画幅 RAW 回放放大仍未解决，未实机验证的部分不得声称已解决。
+- [ ] 不包含 RAW zoom 探针、私钥、Sony 原厂固件；
+- [ ] 明确告知用户：自定义画幅 RAW 回放放大仍未解决，未实机验证的部分不得声称已解决。

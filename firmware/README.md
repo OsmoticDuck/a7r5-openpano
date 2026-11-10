@@ -4,7 +4,7 @@
 
 | 文件 | 作用 |
 |---|---|
-| `final/build_minimal.py` | 在项目 A 的最后功能基线上关闭调试钩子、应用 AF 4B 修正，输出最小最终 AP/CP |
+| `final/build_minimal.py` | 读取项目 A 的 4.92 quality-menu 基线 AP/CP，校验后输出最小最终 AP/CP |
 
 ## 构建
 
@@ -18,27 +18,23 @@ cd ext-aspect-minimal
 python3 build_minimal.py
 ```
 
-输入（项目 A 的最后功能基线）：
+输入 = 最终（4.92 基线已经包含扩展画幅、自制图标、AF 和重启修复）：
 
-- AP：`build-4.85-liveview-20261104/patched/appFw.so`，SHA256 `9f947f68...`
-- CP：`build-4.85-liveview-20261104/patched/cpapp-b.bin`，SHA256 `1bcdddcf...`
+- AP：`build-4.92-quality-menu-20261105/patched/appFw.so`，SHA256 `d1786165...`
+- CP：`build-4.92-quality-menu-20261105/patched/cpapp-b.bin`，SHA256 `feececdc...`
 
 输出：
 
-- `ap-build/appFw-minimal.NONINSTALLABLE.so`，SHA256 `30f556e7c106b5aabb0b06127c08cbdc81229a02f440f1bf6b771038410beb6c`
-- `ap-build/cpapp-minimal.NONINSTALLABLE.bin`，SHA256 `1bcdddcff45ac551d36f0992955e2ffb0c1c54c3d12d3f0c37d0cfb306146f84`
+- `ap-build/appFw-minimal.NONINSTALLABLE.so`，SHA256 `d17861657b062d4228ea74b31844bf7476cd82e3530c36b9b201f930c3df432f`
+- `ap-build/cpapp-minimal.NONINSTALLABLE.bin`，SHA256 `feececdcfdfff740324327eadedc863fc293e136b9b1db91cc8bc4e222f550c4`
 
-脚本做的事：
+## 图标
 
-- 关闭有界异常记录器的 assert/fatal/request/set/sequence 五个入口；
-- 关闭 AF RAM 观察器入口；
-- 在 `0x16d82f0` 应用 AF 显示类别的 4B 修正（`01008052` → `815a40b9`）。
-
-关闭的调试不是扩展画幅的必要条件；关闭后不产生调试文件 IO。基础镜像中的死代码仍在，但没有活动调用；完整删除需要重新链接，本仓库未提供。
+4.92 基线的菜单/回放资源已经安装自制 2:1、65:24 图标；`assets/icons/` 是源文件/备份。2.35:1 用原厂图标。
 
 ## 未解决
 
-自定义画幅拍摄的 RAW 在回放里按放大时仍会提示“无法放大”。AP 的 read/availability/descriptor 已成功，问题在其后的 UI/caution/显示层；本最小版本未修复，也不包含相关诊断探针。
+自定义画幅拍摄的 RAW 在回放里按放大时仍会提示“无法放大”。AP 的 read/availability/descriptor 已成功，问题在其后的 UI/caution/显示层；本最小版本未修复，也不包含 RAW zoom 探针。
 
 ## 版本号
 
