@@ -1,0 +1,24 @@
+# NOTICE
+
+A7R5 OpenPano — https://github.com/OsmoticDuck/a7r5-openpano
+
+This repository contains original build scripts and documentation for a
+minimal extended-aspect-ratio build for the Sony ILCE-7RM5 / A7R V.
+
+It does **not** contain, and does not license:
+
+- Sony firmware, bootloader, updater images, BODYDATA.DAT or any Sony binary;
+- Sony private/public keys or signature-bypass material;
+- the source code of the separate projects sony-a7r5-custom-firmware and
+  a7r5-rea (they are dependencies, not vendored here).
+
+Sony, ILCE-7RM5, A7R V and related names are trademarks of Sony Group
+Corporation. This project is not affiliated with or endorsed by Sony.
+
+The script contains addresses and hook-restoration patches derived from
+analysis of a locally obtained firmware image. It is provided for research and
+personal use only. Users are responsible for complying with applicable laws,
+warranty terms and the licenses of the two base projects.
+
+Custom firmware can brick a camera. There is no warranty and no recovery
+image in this repository. Use at your own risk.

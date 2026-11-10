@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+ap-build/
+build-minimal.json
+*.NONINSTALLABLE.*
+BODYDATA.DAT
+*.DAT
+*.pem
+*.p12
+*.key
+*.bin
+*.img
+*.o
