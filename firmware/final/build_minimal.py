@@ -26,6 +26,13 @@ def sha(b):
 
 
 def main():
+    if not BASE_AP.exists() or not BASE_CP.exists():
+        raise SystemExit(
+            "a7r5-openpano is not self-contained: the 5.01 AP/CP baseline is supplied by "
+            "sony-a7r5-custom-firmware and is not in this GitHub folder. "
+            "Provide the base project (build-5.01-magnify-20261110/patched/appFw.so and "
+            "cpapp-b.bin) or stop and ask the user."
+        )
     ap = BASE_AP.read_bytes()
     cp = BASE_CP.read_bytes()
     assert sha(ap) == BASE_AP_SHA
