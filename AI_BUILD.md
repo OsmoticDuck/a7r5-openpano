@@ -37,7 +37,7 @@ $ROOT/
 
 > 名字冲突很容易误导：A 的 GitHub 仓库叫 `sony-a7r5-custom-firmware`，本机下游工作区也可能叫这个名。执行前先确认路径里有没有 `build-openpano` 和 `package-openpano`；只有它们才是下游基线。
 
-## 1. 上游 A 负责什么
+## 1. [上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware) 负责什么
 
 [Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)
 
@@ -52,7 +52,7 @@ A **不包含**：
 - 自制 2:1 / 65:24 图标；
 - AF 修正、RAW 预览比例修正、RAW 放大研究。
 
-## 2. 上游 B 负责什么
+## 2. [上游 B](https://github.com/Liwenru88/a7r5-rea) 负责什么
 
 [Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)
 
@@ -172,7 +172,7 @@ inspect('BODYDATA.DAT', Path('public.pem'), full=True)
 
 ## 7. 刷写
 
-- 先完成上游 A/B 的**签名旁路/刷写环境**；本仓库不提供绕过方法。
+- 先完成[上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[上游 B](https://github.com/Liwenru88/a7r5-rea) 的**签名旁路/刷写环境**；本仓库不提供绕过方法。
 - 只刷最终生成的单个 `BODYDATA.DAT`。
 - 测试：三个自定义比例分别关机开机；摇杆 AF；对焦放大进出；拍照/回放；切回原厂。
 - 出问题先恢复原厂/OpenPano 下游基线，不要连续刷多个自定义包。
@@ -182,14 +182,14 @@ inspect('BODYDATA.DAT', Path('public.pem'), full=True)
 | 现象 | 原因 | 处理 |
 |---|---|---|
 | 找不到 `build-OpenPano...` | 下游构建工作区没有 OpenPano | 让用户提供下游 OpenPano AP/CP，或用 `A7R5_BASELINE` |
-| 找不到 A/B 源码或工具 | 上游 A/B 未准备 | 按 A/B README 准备；缺什么问用户 |
+| 找不到 A/B 源码或工具 | [上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[上游 B](https://github.com/Liwenru88/a7r5-rea) 未准备 | 按 [A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[B](https://github.com/Liwenru88/a7r5-rea) README 准备；缺什么问用户 |
 | AP/CP 哈希不对 | 基线不是预期 | 用本文件哈希对照 |
 | 签名/整包失败 | 私钥/原厂输入/打包环境不对 | 回 A/B 的签名旁路；不要自己生成密钥 |
 | 版本号被拒 | 容器编号不高于机内 | 换成任意更大的编号 |
 
 ## 9. 交付前检查
 
-- [ ] 上游 A/B 的来源和角色已向用户说明：A 是胶片/声音固件源，B 是工具，OpenPano 是下游基线；
+- [ ] [上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[上游 B](https://github.com/Liwenru88/a7r5-rea) 的来源和角色已向用户说明：A 是胶片/声音固件源，B 是工具，OpenPano 是下游基线；
 - [ ] OpenPano 下游 AP/CP 哈希匹配（`1a0480...` / `33b63...`）；
 - [ ] 最小最终 AP/CP 哈希匹配；
 - [ ] 容器编号是任意更高编号，且已记录；

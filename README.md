@@ -8,7 +8,7 @@
 
 本仓库不是可直接刷入的固件，也不包含 Sony 固件、私钥、升级器或任何 `BODYDATA.DAT`。
 
-**本仓库不是 self-contained**：GitHub 文件夹只有文档、图标和 `firmware/final` 构建脚本，**不包含** OpenPano AP/CP、打包脚本、分区/资源材料、原厂输入、升级器、公私钥或可刷 `BODYDATA.DAT`。OpenPano 是本项目的**下游构建产物**，不是上游 A 的发布；当前验证副本在下游构建工作区，也可以由用户从其他已验证副本提供（`A7R5_BASELINE`）。如果用户只有这个文件夹，AI 会先列出缺失项，无法单独生成固件。
+**本仓库不是 self-contained**：GitHub 文件夹只有文档、图标和 `firmware/final` 构建脚本，**不包含** OpenPano AP/CP、打包脚本、分区/资源材料、原厂输入、升级器、公私钥或可刷 `BODYDATA.DAT`。OpenPano 是本项目的**下游构建产物**，不是[上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)的发布；当前验证副本在下游构建工作区，也可以由用户从其他已验证副本提供（`A7R5_BASELINE`）。如果用户只有这个文件夹，AI 会先列出缺失项，无法单独生成固件。
 
 > **风险提示**：自定义固件需要先绕过 Sony 签名校验；刷写错误可能导致相机无法开机，请让 AI 严格按照本仓库或相关基础项目的说明操作。本项目不提供签名密钥、不提供固件，也不对设备损坏负责。
 
@@ -27,7 +27,7 @@
 
 具体工具链、命令和哈希见 [AI_BUILD.md](AI_BUILD.md)。
 
-上游 A 提供胶片/滤镜、声音等固件源；上游 B 提供 DAT、更新信任、Studio 等工具。签名旁路、原厂输入、升级器和签名材料按 A/B 的说明准备；本仓库不提供。
+[上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware) 提供胶片/滤镜、声音等固件源；[上游 B](https://github.com/Liwenru88/a7r5-rea) 提供 DAT、更新信任、Studio 等工具。签名旁路、原厂输入、升级器和签名材料按 [A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[B](https://github.com/Liwenru88/a7r5-rea) 的说明准备；本仓库不提供。
 
 **建议让 AI 按 [AI_BUILD.md](AI_BUILD.md) 操作**；README 不重复构建/哈希细节。
 
@@ -53,7 +53,7 @@ AI 需要本机有：
 - [Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)（上游 A，胶片/声音固件源）；
 - [Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)（上游 B，DAT/Studio/信任工具）；
 - OpenPano 下游基线（当前验证副本在下游构建工作区，也可由其他已验证副本提供）、原厂输入、升级器和签名材料。
-- 上游 A/B 的源码或工具环境（A 提供胶片/声音固件源，B 提供 DAT/信任/Studio 工具）。
+- [上游 A](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)/[上游 B](https://github.com/Liwenru88/a7r5-rea) 的源码或工具环境（A 提供胶片/声音固件源，B 提供 DAT/信任/Studio 工具）。
 
 缺任何一项，让 AI 先列出来问你，不要自己造基线或密钥。
 
