@@ -16,6 +16,7 @@
 
 - **A — [Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)**：Sony A7R V 的胶片/滤镜、声音自定义固件源（当前 4.55）；A 本身不含扩展画幅和 5.01。
 - **B — [Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)**：A7R5 Studio、DAT 工具、更新信任、libjit、ColorLab 等研究/验证工具；B 不是固件基线。
+- **4.36 胶片源 — [Erlla/sony-a7m4-custom-firmware](https://github.com/Erlla/sony-a7m4-custom-firmware)**：FL2/FL3、12 滤镜的源码；本地 4.45 容器是它的 frozen436 源码打包，不是 Erlla 的 4.45 上游版本。
 
 ## 使用前必须完成的事项
 
@@ -23,7 +24,7 @@
 
 1. **[Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)**（上游 A）：Sony A7R V 的胶片/滤镜、声音等自定义固件源与构建（当前 4.55）。A 本身不含扩展画幅、5.01、自制图标、AF 修正或 RAW 预览修正。
 2. **[Liwenru88/a7r5-rea](https://github.com/Liwenru88/a7r5-rea)**（上游 B）：A7R5 Studio、a7r5-dat-tool、更新信任、libjit、ColorLab 等 DAT/验证/相机工具。B 不是固件基线。
-3. **5.01 下游基线/打包材料**：由本项目在 A 的固件源基础上、借助 B 的工具构建；当前副本在本地**下游构建工作区**（文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。可以用 `A7R5_BASELINE` 指向其他已验证的同哈希副本。5.01 不在本 GitHub 文件夹，也不是 A 的发布。
+3. **5.01 下游基线/打包材料**：由本项目在 **Erlla 4.36 胶片源**（本地打包为 4.45 容器）基础上、借助 B 的工具构建；当前副本在本地**下游构建工作区**（文件夹名为 `sony-a7r5-custom-firmware`，但它**不是 A 的 GitHub 仓库**）。A 4.55 是后续 R5 项目，保留 4.36 滤镜并增加声音；5.01 不包含 A 4.55 的声音部分。可以用 `A7R5_BASELINE` 指向其他已验证的同哈希副本。5.01 不在本 GitHub 文件夹，也不是 A 的发布。
 
 具体工具链、命令和哈希见 [AI_BUILD.md](AI_BUILD.md)。
 
@@ -35,8 +36,8 @@
 
 > **选择从 A 开始构建，只是为了同时包含胶片预设；如果只想要自定义画幅、不要胶片预设，也可以从原版固件构建，但需要单独和 AI 说明。**
 
-- **功能上可以**：自定义画幅补丁本身不调用 A 的胶片/滤镜/声音逻辑；A 只是当前选择的宿主。
-- **但不能直接拿当前 5.01 的 AP/CP 当“纯原版画幅包”**：5.01 建立在 A 系/Erlla 的 4.45 胶片基线上（4.45 已含 FL2/FL3、12 滤镜等），补丁地址、表、资源和验证链路都是按这个基线和下游构建开发的。
+- **功能上可以**：自定义画幅补丁本身不调用 A 4.55 或 Erlla 4.36 的胶片/滤镜/声音逻辑；当前只是借 Erlla 4.36 的胶片源作宿主。
+- **但不能直接拿当前 5.01 的 AP/CP 当“纯原版画幅包”**：5.01 建立在本地 4.45 容器上，源码是 **Erlla 4.36（frozen436）**（4.45 已含 FL2/FL3、12 滤镜等；它不是 Erlla/A 的 4.45 上游版本），补丁地址、表、资源和验证链路都是按这个基线和下游构建开发的。
 - **纯原版构建需要单独说明并重新移植**：原始 R5 4.00 AP/CP → 重新移植/重定位 aspect 补丁 → 重新生成图标/资源 → 重新做 AF/RAW 预览修正 → 用 B 的 DAT 工具签名/验证。它不是切换一个开关，而是新的 port；当前仓库没有这个纯原版构建，也没有验证过。
 - **结论**：只想要画幅、不要胶片预设，可以走原版构建，但必须单独告诉 AI；当前 5.01 不是那个包，不能把 5.01 直接减去 A。
 

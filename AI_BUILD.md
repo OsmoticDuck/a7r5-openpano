@@ -17,7 +17,7 @@
   - 5.01 下游 AP/CP（`1a0480...` / `33b63...`）；
   - `package501.py`、`partition501.json`、`resources/`、原厂输入、升级器、签名材料。
 - 最终 AP/CP 与 5.01 下游基线**逐字节相同**；本项目不修 RAW 放大弹窗，不要声称修好。
-- **A 只用于胶片/滤镜/声音；自定义画幅逻辑不依赖 A**。但当前 5.01 的 AP/CP 是建立在 A 系/Erlla 4.45 胶片基线上的下游二进制；如果用户要求“只从原版固件、不要胶片预设”，不要拿 5.01 冒充，也不要直接删 A 的资源；必须说明需要把 aspect 补丁重新移植到原始 4.00 AP/CP，并重新做图标、AF、RAW 预览和打包验证。这个纯原版 port 当前不存在。
+- **A 只用于胶片/滤镜/声音；自定义画幅逻辑不依赖 A**。但当前 5.01 的 AP/CP 是建立在本地的 4.45 容器上的下游二进制，源码是 **Erlla 4.36（frozen436）**；4.45 不是 Erlla/A 的上游版本。A 4.55 是后续 R5 项目，保留 4.36 滤镜并增加声音；5.01 不包含 A 4.55 的声音部分。如果用户要求“只从原版固件、不要胶片预设”，不要拿 5.01 冒充，也不要直接删 A 的资源；必须说明需要把 aspect 补丁重新移植到原始 4.00 AP/CP，并重新做图标、AF、RAW 预览和打包验证。这个纯原版 port 当前不存在。
 - 只刷最终单个 `BODYDATA.DAT`；不要刷中间 AP/CP。
 - 本仓库**不是 self-contained**：GitHub 文件夹只有 README/AI/CHANGES/assets 和 `firmware/final` 构建脚本；5.01 AP/CP、`package501.py`、`partition501.json`、`resources/`、原厂输入、公私钥、可刷 DAT 都不在本仓库。用户只给本文件夹时，列出缺失并停止，不能引用外部 ready DAT 冒充本仓库产物。
 
@@ -41,7 +41,8 @@ $ROOT/
 
 [Hearts-Ace/sony-a7r5-custom-firmware](https://github.com/Hearts-Ace/sony-a7r5-custom-firmware)
 
-- Sony A7R V / R5 的胶片/滤镜、声音等自定义固件源与构建（当前 4.55）；
+- Sony A7R V / R5 的胶片/滤镜、声音等自定义固件源与构建（当前 4.55）；它保留 4.36 滤镜并增加声音；
+- 4.36 的原始胶片源在 [Erlla/sony-a7m4-custom-firmware](https://github.com/Erlla/sony-a7m4-custom-firmware)；本地 4.45 是它的 frozen436 源码打包，不是 Erlla 的 4.45；
 - 六槽回读/解放工具、声音包、滤镜 BIN、ColorLab 工作台；
 - 固件源码构建入口；原厂输入、外部签名材料和工具链由使用者按 A 的 README 准备。
 
@@ -68,7 +69,7 @@ B **不是固件基线**，不提供 5.01 AP/CP；它用于构建/验证/打包�
 5.01 是本项目在 A 的固件源基础上、借助 B 的工具构建出来的扩展画幅基线：
 
 - 不是 A 的发布，也不是 B 的发布；
-- 当前验证副本在下游构建工作区 `$BUILD/build-5.01-magnify-20261110/patched/`；
+- 当前验证副本在下游构建工作区 `$BUILD/build-5.01-magnify-20261110/patched/`；其 4.45 是本地容器版本，源码是 Erlla 4.36（frozen436），不是 Erlla/A 的上游 4.45；
 - 本仓库不包含它；也可以用 `A7R5_BASELINE` 指向其他同哈希副本；
 - 已包含：扩展画幅、2:1/65:24 自制图标、AF 修正、RAW 预览比例修正、重启/显示修复；
 - 唯一未解决：自定义画幅 RAW 回放放大仍提示“无法放大”。
